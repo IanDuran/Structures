@@ -32,7 +32,7 @@ public interface List<E> extends Collection{
      * @return the element in the next position, null if the
      *          index is the last element in the list.
      */
-    E next(int index);
+    int next(int index);
 
     /**
      * Returns the previous element in the list based on the given position.
@@ -41,7 +41,7 @@ public interface List<E> extends Collection{
      * @return the element in the previous position, null if the
      *          index is the first element in the list.
      */
-    E previous(int index);
+    int previous(int index);
 
     /**
      * Replaces the element at the specified position in this list with the

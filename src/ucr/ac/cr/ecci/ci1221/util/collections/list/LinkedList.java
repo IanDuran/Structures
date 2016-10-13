@@ -48,7 +48,7 @@ public class LinkedList<E> implements List<E> {
      * @return the E type object next to the one at index.
      */
     @Override
-    public E next(int index) {
+    public int next(int index) {
         E toReturn = null;
         if(index > numElem - 1 || index < 0)
             throw new IndexOutOfBoundsException();
@@ -61,7 +61,7 @@ public class LinkedList<E> implements List<E> {
             }
             toReturn = currentContainer.value;
         }
-        return toReturn;
+        return 0;
     }
 
     /**
@@ -73,7 +73,7 @@ public class LinkedList<E> implements List<E> {
      * @return the E type object on the position previous to the one pointed at by index.
      */
     @Override
-    public E previous(int index) {
+    public int previous(int index) {
         E toReturn = null;
         if(index >= numElem || index <= 0)
             throw new IndexOutOfBoundsException();
@@ -86,7 +86,7 @@ public class LinkedList<E> implements List<E> {
             }
             toReturn = currentContainer.value;
         }
-        return toReturn;
+        return 0;
     }
 
     /**

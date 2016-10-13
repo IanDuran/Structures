@@ -33,10 +33,11 @@ public class ArrayList<E> implements List<E> {
      * @return the object next to the position passed as parameter.
      */
     @Override
-    public E next(int index) {
+    public int next(int index) {
         if(index >= storedElements - 1 || index < 0)
             throw new IndexOutOfBoundsException();
-        return list[index + 1];
+        //return list[index + 1];
+        return 0;
     }
 
     /**
@@ -45,10 +46,11 @@ public class ArrayList<E> implements List<E> {
      * @return the object in the position before the index passed.
      */
     @Override
-    public E previous(int index) {
+    public int previous(int index) {
         if(index >= storedElements || index < 1)
             throw new IndexOutOfBoundsException();
-        return list[index - 1];
+        //return list[index - 1];
+        return 0;
     }
 
     /**
