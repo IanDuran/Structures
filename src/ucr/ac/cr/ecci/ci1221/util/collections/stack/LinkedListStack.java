@@ -23,7 +23,7 @@ public class LinkedListStack<E> implements Stack<E> {
         if(top == null){
             top = newContainer;
         }else{
-            newContainer.next = top;
+            newContainer.setNext(top);
             top = newContainer;
         }
         numElem++;
@@ -40,8 +40,8 @@ public class LinkedListStack<E> implements Stack<E> {
     public E pop() {
         E toReturn = null;
         if(top != null){
-            toReturn = top.value;
-            top = top.next;
+            toReturn = top.getValue();
+            top = top.getNext();
             numElem--;
         }
         return toReturn;
@@ -55,7 +55,7 @@ public class LinkedListStack<E> implements Stack<E> {
     public E peek() {
         E toReturn = null;
         if(top != null)
-            toReturn = top.value;
+            toReturn = top.getValue();
         return toReturn;
     }
 
@@ -82,7 +82,7 @@ public class LinkedListStack<E> implements Stack<E> {
      */
     @Override
     public void clear() {
-        top.next = null;
+        top.setNext(null);
         top = null;
         numElem = 0;
     }
@@ -93,11 +93,24 @@ public class LinkedListStack<E> implements Stack<E> {
      * @author Ian Duran
      */
     private class Container<T>{
-        T value;
-        Container<T> next;
+        private T value;
+        private Container<T> next;
+
         public Container(T value){
             this.value = value;
             this.next = null;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public Container<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Container<T> next) {
+            this.next = next;
         }
     }
 }

@@ -31,10 +31,10 @@ public class LinkedList<E> implements List<E> {
             Container<E> currentContainer = first;
             int counter = 0;
             while(counter < index){
-                currentContainer = currentContainer.next;
+                currentContainer = currentContainer.getNext();
                 counter++;
             }
-            toReturn = currentContainer.value;
+            toReturn = currentContainer.getValue();
         }
         return toReturn;
     }
@@ -49,18 +49,6 @@ public class LinkedList<E> implements List<E> {
      */
     @Override
     public int next(int index) {
-        E toReturn = null;
-        if(index > numElem - 1 || index < 0)
-            throw new IndexOutOfBoundsException();
-        if(first != null){
-            Container<E> currentContainer = first;
-            int counter = 0;
-            while(counter < index + 1){
-                currentContainer = currentContainer.next;
-                counter++;
-            }
-            toReturn = currentContainer.value;
-        }
         return 0;
     }
 
@@ -74,18 +62,6 @@ public class LinkedList<E> implements List<E> {
      */
     @Override
     public int previous(int index) {
-        E toReturn = null;
-        if(index >= numElem || index <= 0)
-            throw new IndexOutOfBoundsException();
-        if(first != null){
-            Container<E> currentContainer = first;
-            int counter = 0;
-            while(counter < index - 1){
-                currentContainer = currentContainer.next;
-                counter++;
-            }
-            toReturn = currentContainer.value;
-        }
         return 0;
     }
 
@@ -106,24 +82,24 @@ public class LinkedList<E> implements List<E> {
             throw new NullPointerException();
         if(first != null){
             if(index == 0){
-                toReturn = first.value;
-                first.value = element;
+                toReturn = first.getValue();
+                first.setValue(element);
             }else if(index == numElem - 1){
                 Container<E> currentContainer = first;
-                while(currentContainer.next != null){
-                    currentContainer = currentContainer.next;
+                while(currentContainer.getNext() != null){
+                    currentContainer = currentContainer.getNext();
                 }
-                toReturn = currentContainer.value;
-                currentContainer.value = element;
+                toReturn = currentContainer.getValue();
+                currentContainer.setValue(element);
             } else{
                 Container<E> currentContainer = first;
                 int counter = 0;
                 while(counter < index){
-                    currentContainer = currentContainer.next;
+                    currentContainer = currentContainer.getNext();
                     counter++;
                 }
-                toReturn = currentContainer.value;
-                currentContainer.value = element;
+                toReturn = currentContainer.getValue();
+                currentContainer.setValue(element);
             }
         }
         return toReturn;
@@ -149,23 +125,23 @@ public class LinkedList<E> implements List<E> {
             first = newContainer;
         else{
             if(index == 0){
-                newContainer.next = first;
+                newContainer.setNext(first);
                 first = newContainer;
             }else if(index == numElem - 1){
                 Container<E> currentContainer = first;
-                while(currentContainer.next != null){
-                    currentContainer = currentContainer.next;
+                while(currentContainer.getNext() != null){
+                    currentContainer = currentContainer.getNext();
                 }
-                currentContainer.next = newContainer;
+                currentContainer.setNext(newContainer);
             }else{
                 Container<E> currentContainer = first;
                 int counter = 0;
                 while(counter < index - 1){
-                    currentContainer = currentContainer.next;
+                    currentContainer = currentContainer.getNext();
                     counter++;
                 }
-                newContainer.next = currentContainer.next;
-                currentContainer.next = newContainer;
+                newContainer.setNext(currentContainer.getNext());
+                currentContainer.setNext(newContainer);
             }
         }
         numElem++;
@@ -191,10 +167,10 @@ public class LinkedList<E> implements List<E> {
             isAdded = true;
         }else{
             Container<E> currentContainer = first;
-            while(currentContainer.next != null){
-                currentContainer = currentContainer.next;
+            while(currentContainer.getNext() != null){
+                currentContainer = currentContainer.getNext();
             }
-            currentContainer.next = newContainer;
+            currentContainer.setNext(newContainer);
             isAdded = true;
         }
         numElem++;
@@ -220,22 +196,24 @@ public class LinkedList<E> implements List<E> {
         E toReturn = null;
         if(first != null){
             if(index == 0){
-                toReturn = first.value;
-                first = first.next;
+                toReturn = first.getValue();
+                first = first.getNext();
             }else if(index == numElem - 1){
                 Container<E> c = first;
-                while(c.next.next != null){
-                    c = c.next;
+                while(c.getNext().getNext() != null){
+                    c = c.getNext();
                 }
-                c.next = null;
+                toReturn = c.getNext().getValue();
+                c.setNext(null);
             }else{
                 Container<E> c = first;
                 int counter = 0;
                 while(counter < index - 1){
-                    c = c.next;
+                    c = c.getNext();
                     counter++;
                 }
-                c.next = c.next.next;
+                toReturn = c.getNext().getValue();
+                c.setNext(c.getNext().getNext());
             }
             numElem--;
         }
@@ -274,7 +252,7 @@ public class LinkedList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        first.next = null;
+        first.setNext(null);
         first = null;
         numElem = 0;
     }
@@ -285,9 +263,25 @@ public class LinkedList<E> implements List<E> {
      * @author Ian Duran.
      */
     private class Container<T>{
-        Container<T> next;
-        T value;
+        private Container<T> next;
+        private T value;
         public Container(T value){
+            this.value = value;
+        }
+
+        public Container<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Container<T> next) {
+            this.next = next;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public void setValue(T value) {
             this.value = value;
         }
     }
@@ -331,8 +325,8 @@ public class LinkedList<E> implements List<E> {
         public E next(){
             E toReturn = null;
             if(iterator != null){
-                toReturn = iterator.value;
-                iterator = iterator.next;
+                toReturn = iterator.getValue();
+                iterator = iterator.getNext();
             }
             return toReturn;
         }

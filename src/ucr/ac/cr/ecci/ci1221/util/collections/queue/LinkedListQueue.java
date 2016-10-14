@@ -27,7 +27,7 @@ public class LinkedListQueue<E> implements Queue<E> {
             head = newContainer;
             tail = newContainer;
         }else{
-            newContainer.next = tail;
+            newContainer.setNext(tail);
             tail = newContainer;
         }
         numElem++;
@@ -47,15 +47,15 @@ public class LinkedListQueue<E> implements Queue<E> {
     public E dequeue() {
         E toReturn = null;
         if(tail != null && head != null){
-            toReturn = head.value;
+            toReturn = head.getValue();
             if(head == tail){
                 head = tail = null;
             }else{
                 Container<E> currentContainer = tail;
-                while(currentContainer.next != head){
-                    currentContainer = currentContainer.next;
+                while(currentContainer.getNext() != head){
+                    currentContainer = currentContainer.getNext();
                 }
-                currentContainer.next = null;
+                currentContainer.setNext(null);
                 head = currentContainer;
             }
 
@@ -72,7 +72,7 @@ public class LinkedListQueue<E> implements Queue<E> {
     public E peek() {
         E toReturn = null;
         if(head != null && tail != null)
-            toReturn = head.value;
+            toReturn = head.getValue();
         return toReturn;
     }
 
@@ -99,7 +99,7 @@ public class LinkedListQueue<E> implements Queue<E> {
      */
     @Override
     public void clear() {
-        tail.next = null;
+        tail.setNext(null);
         tail = null;
         head = null;
         numElem = 0;
@@ -112,11 +112,27 @@ public class LinkedListQueue<E> implements Queue<E> {
      * @author Ian Duran
      */
     private class Container<T>{
-        T value;
-        Container<T> next;
+        private T value;
+        private Container<T> next;
         public Container(T value){
             this.value = value;
             this.next = null;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public void setValue(T value) {
+            this.value = value;
+        }
+
+        public Container<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Container<T> next) {
+            this.next = next;
         }
     }
 }

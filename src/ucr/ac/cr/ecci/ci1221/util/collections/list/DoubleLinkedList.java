@@ -30,27 +30,27 @@ public class DoubleLinkedList<E> implements List<E>  {
             throw new IndexOutOfBoundsException();
         if(first != null && last != null){
             if(index == 0){
-                toReturn = first.value;
+                toReturn = first.getValue();
             }else if(index == numElem - 1){
-                toReturn = last.value;
+                toReturn = last.getValue();
             }else{
                 Container<E> currentContainer = null;
                 if(index <= numElem / 2){
                     currentContainer = first;
                     int counter = 0;
                     while(counter < index){
-                        currentContainer = currentContainer.next;
+                        currentContainer = currentContainer.getNext();
                         counter++;
                     }
                 }else{
                     currentContainer = last;
                     int counter = numElem - 1;
                     while(counter > index){
-                        currentContainer = currentContainer.previous;
+                        currentContainer = currentContainer.getPrevious();
                         counter--;
                     }
                 }
-                toReturn = currentContainer.value;
+                toReturn = currentContainer.getValue();
             }
         }
         return toReturn;
@@ -67,28 +67,6 @@ public class DoubleLinkedList<E> implements List<E>  {
      */
     @Override
     public int next(int index) {
-        E toReturn = null;
-        if(index >= numElem - 1 || index < 0)
-            throw new IndexOutOfBoundsException();
-        if(first != null && last != null){
-            Container<E> currentContainer = null;
-            if(index <= numElem / 2){
-                currentContainer = first;
-                int counter = 0;
-                while(counter < index + 1){
-                    currentContainer = currentContainer.next;
-                    counter++;
-                }
-            }else{
-                currentContainer = last;
-                int counter = numElem - 1;
-                while(counter > index + 1){
-                    currentContainer = currentContainer.previous;
-                    counter--;
-                }
-            }
-            toReturn = currentContainer.value;
-        }
         return 0;
     }
 
@@ -103,28 +81,6 @@ public class DoubleLinkedList<E> implements List<E>  {
      */
     @Override
     public int previous(int index) {
-        E toReturn = null;
-        if(index >= numElem || index < 1)
-            throw new IndexOutOfBoundsException();
-        if(first != null && last != null){
-            Container<E> currentContainer = null;
-            if(index <= numElem / 2){
-                currentContainer = first;
-                int counter = 0;
-                while(counter < index - 1){
-                    currentContainer = currentContainer.next;
-                    counter++;
-                }
-            }else{
-                currentContainer = last;
-                int counter = numElem;
-                while(counter > index){
-                    currentContainer = currentContainer.previous;
-                    counter--;
-                }
-            }
-            toReturn = currentContainer.value;
-        }
         return 0;
     }
 
@@ -146,30 +102,30 @@ public class DoubleLinkedList<E> implements List<E>  {
             throw new NullPointerException();
         if(first != null && last != null){
             if(index == 0){
-                toReturn = first.value;
-                first.value = element;
+                toReturn = first.getValue();
+                first.setValue(element);
             }else if(index == numElem - 1){
-                toReturn = last.value;
-                last.value = element;
+                toReturn = last.getValue();
+                last.setValue(element);
             }else{
                 Container<E> currentContainer = null;
                 if(index <= numElem / 2){
                     currentContainer = first;
                     int counter = 0;
                     while(counter < index){
-                        currentContainer = currentContainer.next;
+                        currentContainer = currentContainer.getNext();
                         counter++;
                     }
                 }else{
                     currentContainer = last;
                     int counter = numElem - 1;
                     while(counter > index){
-                        currentContainer = currentContainer.previous;
+                        currentContainer = currentContainer.getPrevious();
                         counter--;
                     }
                 }
-                toReturn = currentContainer.value;
-                currentContainer.value = element;
+                toReturn = currentContainer.getValue();
+                currentContainer.setValue(element);
             }
         }
         return toReturn;
@@ -200,36 +156,36 @@ public class DoubleLinkedList<E> implements List<E>  {
         if(first != null && last != null){
             Container<E> newContainer = new Container<>(element);
             if(index == 0){
-                first.previous = newContainer;
-                newContainer.next = first;
+                first.setPrevious(newContainer);
+                newContainer.setNext(first);
                 first = newContainer;
             }else if(index == numElem){
-                last.next = newContainer;
-                newContainer.previous = last;
+                last.setNext(newContainer);
+                newContainer.setPrevious(last);
                 last = newContainer;
             }else{
                 if(index <= numElem / 2){
                     Container<E> currentContainer = first;
                     int counter = 0;
                     while(counter < index - 1){
-                        currentContainer = currentContainer.next;
+                        currentContainer = currentContainer.getNext();
                         counter++;
                     }
-                    currentContainer.next.previous = newContainer;
-                    newContainer.next = currentContainer.next;
-                    currentContainer.next = newContainer;
-                    newContainer.previous = currentContainer;
+                    currentContainer.getNext().setPrevious(newContainer);
+                    newContainer.setNext(currentContainer.getNext());
+                    currentContainer.setNext(newContainer);
+                    newContainer.setPrevious(currentContainer);
                 }else{
                     Container<E> currentContainer = last;
                     int counter = numElem;
                     while(counter > index + 1){
-                        currentContainer = currentContainer.previous;
+                        currentContainer = currentContainer.getPrevious();
                         counter--;
                     }
-                    currentContainer.previous.next = newContainer;
-                    newContainer.previous = currentContainer.previous;
-                    currentContainer.previous = newContainer;
-                    newContainer.next = currentContainer;
+                    currentContainer.getPrevious().setNext(newContainer);
+                    newContainer.setPrevious(currentContainer.getPrevious());
+                    currentContainer.setPrevious(newContainer);
+                    newContainer.setNext(currentContainer);
                 }
             }
             numElem++;
@@ -256,9 +212,9 @@ public class DoubleLinkedList<E> implements List<E>  {
             last = first;
             isAdded = true;
         }else{
-            last.next = newContainer;
-            last.next.previous = last;
-            last = last.next;
+            last.setNext(newContainer);
+            last.getNext().setPrevious(last);
+            last = last.getNext();
             isAdded = true;
         }
         numElem++;
@@ -287,34 +243,34 @@ public class DoubleLinkedList<E> implements List<E>  {
         E toReturn = null;
         if(first != null && last != null){
             if(index == 0){
-                toReturn = first.value;
-                first = first.next;
-                first.previous = null;
+                toReturn = first.getValue();
+                first = first.getNext();
+                first.setPrevious(null);
             }else if(index == numElem - 1){
-                toReturn = last.value;
-                last = last.previous;
-                last.next = null;
+                toReturn = last.getValue();
+                last = last.getPrevious();
+                last.setNext(null);
             }else{
                 if(index <= numElem / 2){
                     Container<E> currentContainer = first;
                     int counter = 0;
                     while(counter < index - 1){
-                        currentContainer = currentContainer.next;
+                        currentContainer = currentContainer.getNext();
                         counter++;
                     }
-                    toReturn = currentContainer.next.value;
-                    currentContainer.next.next.previous = currentContainer;
-                    currentContainer.next = currentContainer.next.next;
+                    toReturn = currentContainer.getNext().getValue();
+                    currentContainer.getNext().getNext().setPrevious(currentContainer);
+                    currentContainer.setNext(currentContainer.getNext().getNext());
                 }else{
                     Container<E> currentContainer = last;
                     int counter = numElem - 1;
                     while(counter > index + 1){
-                        currentContainer = currentContainer.previous;
+                        currentContainer = currentContainer.getPrevious();
                         counter--;
                     }
-                    toReturn = currentContainer.previous.value;
-                    currentContainer.previous.previous.next = currentContainer;
-                    currentContainer.previous = currentContainer.previous.previous;
+                    toReturn = currentContainer.getPrevious().getValue();
+                    currentContainer.getPrevious().getPrevious().setNext(currentContainer);
+                    currentContainer.setPrevious(currentContainer.getPrevious().getPrevious());
                 }
             }
             numElem--;
@@ -354,9 +310,9 @@ public class DoubleLinkedList<E> implements List<E>  {
      */
     @Override
     public void clear() {
-        first.next = null;
+        first.setNext(null);
         first = null;
-        last.previous = null;
+        last.setPrevious(null);
         last = null;
         numElem = 0;
     }
@@ -368,11 +324,35 @@ public class DoubleLinkedList<E> implements List<E>  {
      * @param <T> class that will be stored.
      */
     private class Container<T>{
-        Container<T> next;
-        Container<T> previous;
-        T value;
+        private Container<T> next;
+        private Container<T> previous;
+        private T value;
 
         public Container(T value){
+            this.value = value;
+        }
+
+        public Container<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Container<T> next) {
+            this.next = next;
+        }
+
+        public Container<T> getPrevious() {
+            return previous;
+        }
+
+        public void setPrevious(Container<T> previous) {
+            this.previous = previous;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public void setValue(T value) {
             this.value = value;
         }
     }
@@ -419,9 +399,8 @@ public class DoubleLinkedList<E> implements List<E>  {
         public E next(){
             E toReturn = null;
             if(iterator != null){
-                toReturn = iterator.value;
-                iterator = iterator.next;
-
+                toReturn = iterator.getValue();
+                iterator = iterator.getNext();
             }
             return toReturn;
         }
