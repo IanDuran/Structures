@@ -7,13 +7,19 @@ public class PointerTree<T> implements Tree<T> {
 
     /* @TODO add missing attributes and fill methods. */
 
+    PointerTreeNode<T> root = null;
+
+    public PointerTree(Node<T> root){
+        this.root = (PointerTreeNode)root;
+    }
+
     @Override
     public Node<T> getRoot() {
-        return null;
+        return root;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return root == null;
     }
 }

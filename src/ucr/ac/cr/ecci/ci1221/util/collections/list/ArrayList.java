@@ -26,6 +26,11 @@ public class ArrayList<E> implements List<E> {
         return toReturn;
     }
 
+    @Override
+    public int first(){
+        return 0;
+    }
+
     /**
      * Returns the E type element in the index next to the one passed as a parameter.
      * @throws IndexOutOfBoundsException if the index is not valid.

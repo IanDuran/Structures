@@ -39,6 +39,11 @@ public class LinkedList<E> implements List<E> {
         return toReturn;
     }
 
+    @Override
+    public int first(){
+        return 0;
+    }
+
     /**
      * Returns the E type object next to the one at index.
      * To get there it iterates over the Containers in the list until it gets

@@ -26,10 +26,17 @@ public interface List<E> extends Collection{
     E get(int index);
 
     /**
+     * Returns the position of the first element in the list.
+     *
+     * @return the position of the first element.
+     */
+    int first();
+
+    /**
      * Returns the next element in the list based on the given position.
      *
      * @param index the index used to calculate the next element.
-     * @return the element in the next position, null if the
+     * @return the position of the next element of the list if any, null if the
      *          index is the last element in the list.
      */
     int next(int index);
@@ -38,7 +45,7 @@ public interface List<E> extends Collection{
      * Returns the previous element in the list based on the given position.
      *
      * @param index the index used to calculate the previous element.
-     * @return the element in the previous position, null if the
+     * @return the position of the previous element of the list if any, null if the
      *          index is the first element in the list.
      */
     int previous(int index);

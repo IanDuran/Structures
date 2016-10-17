@@ -1,5 +1,7 @@
 package ucr.ac.cr.ecci.ci1221.util.collections.set;
 
+import java.util.Iterator;
+
 /**
  * @author Rodrigo A. Bartels
  */
@@ -73,4 +75,12 @@ public interface Set<T>{
      * @return set size.
      */
     int size();
+
+    /**
+     * Returns an iterator over the elements of the set. It doesn't guarantee any given order of
+     * the elements.
+     *
+     * @return an iterator.
+     */
+    Iterator<T> iterator();
 }

@@ -56,6 +56,11 @@ public class DoubleLinkedList<E> implements List<E>  {
         return toReturn;
     }
 
+    @Override
+    public int first(){
+        return 0;
+    }
+
     /**
      * Returns the element next to the one pointer at by index.
      * To get to the desired element faster, if index is in the first half of the list,
