@@ -1,5 +1,7 @@
 package ucr.ac.cr.ecci.ci1221.util.collections.set;
 
+import java.util.Iterator;
+
 /**
  * @author Student Name
  */
@@ -50,5 +52,10 @@ public class Trie implements Set<String> {
     @Override
     public int size() {
         return 0;
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return null;
     }
 }

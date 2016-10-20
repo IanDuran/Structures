@@ -7,9 +7,8 @@ import java.util.Iterator;
  */
 public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
-    /* @TODO add missing attributes and fill methods. */
     private boolean[] members = new boolean[20];
-    private T[] values = (T[]) new Object[20];
+    private T[] values = (T[]) new Enumerable[20];
     private int storedObjects = 0;
 
     @Override
@@ -19,7 +18,30 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     @Override
     public EnumerableSet<T> intersection(EnumerableSet<T> set) {
-        return null;
+        EnumerableSet<T> newSet = new BitVector<>();
+        T[] ownElements = (T[]) new Enumerable[storedObjects];
+        T[] otherElements = (T[]) new Enumerable[set.size()];
+        Iterator<T> ownIterator = this.iterator();
+        Iterator<T> otherIterator = set.iterator();
+        int firstIndex = 0;
+        while(ownIterator.hasNext()){
+            ownElements[firstIndex] = ownIterator.next();
+            firstIndex++;
+        }
+        int secondIndex = 0;
+        while(otherIterator.hasNext()){
+            otherElements[secondIndex] = otherIterator.next();
+            secondIndex++;
+        }
+        int firstSize = ownElements.length;
+        int secondSize = otherElements.length;
+        for(int i = 0; i < firstSize; i++){
+            for(int j = 0; j < secondSize; j++){
+                if(ownElements[i].equals(otherElements[j]))
+                    newSet.put(ownElements[i]);
+            }
+        }
+        return newSet;
     }
 
     @Override
@@ -40,17 +62,19 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
     @Override
     public void clear() {
         members = new boolean[20];
-        values = (T[]) new Object[20];
+        values = (T[]) new Enumerable[20];
     }
 
     @Override
     public void put(T key) {
+        //if(!members[key.getIndex()]){
         int index = key.getIndex();
         while(values.length <= index)
             enlarge();
         values[index] = key;
         members[index] = true;
         storedObjects++;
+        //}
     }
 
     @Override
@@ -65,7 +89,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new BitVectorIterator<T>(values, members);
     }
 
     @Override
@@ -74,13 +98,47 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
     }
 
     public void enlarge(){
-        T[] newArray = (T[]) new Object[values.length + 10];
-        boolean[] newBoolArray = new boolean[members.length];
+        T[] newArray = (T[]) new Enumerable[values.length + 10];
+        boolean[] newBoolArray = new boolean[members.length + 10];
         for(int i = 0; i < values.length; i++){
             newArray[i] = values[i];
             newBoolArray[i] = members[i];
         }
         values = newArray;
         members = newBoolArray;
+    }
+
+    private class BitVectorIterator<E> implements Iterator<E>{
+        private boolean[] members = null;
+        private E[] values = null;
+        private int currentIndex = 0;
+
+        public BitVectorIterator(E[] values, boolean[] members){
+            this.values = values;
+            this.members = members;
+            while(currentIndex < members.length && !members[currentIndex])
+                currentIndex++;
+        }
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = false;
+            if(currentIndex < members.length)
+                if(members[currentIndex])
+                    hasNext = true;
+            return hasNext;
+        }
+
+        @Override
+        public E next() {
+            E toReturn = null;
+            if(members[currentIndex]){
+                toReturn = values[currentIndex];
+                currentIndex++;
+                while(currentIndex < members.length && !members[currentIndex])
+                    currentIndex++;
+            }
+            return toReturn;
+        }
     }
 }

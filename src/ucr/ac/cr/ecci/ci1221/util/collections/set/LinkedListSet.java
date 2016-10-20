@@ -12,29 +12,55 @@ public class LinkedListSet<T> implements Set<T> {
 
     @Override
     public Set<T> union(Set<T> set) {
-        return null;
+        Set<T> union = new LinkedListSet<>();
+        Iterator<T> ownIterator = this.iterator();
+        Iterator<T> otherIterator = set.iterator();
+        while(ownIterator.hasNext())
+            union.put(ownIterator.next());
+
+        while(otherIterator.hasNext()){
+            T key = otherIterator.next();
+            if(!union.isMember(key)){
+                union.put(key);
+            }
+        }
+        return union;
     }
 
     @Override
     public Set<T> intersection(Set<T> set) {
-        return null;
+        Set<T> intersection = new LinkedListSet<>();
+        Iterator<T> otherIterator = set.iterator();
+        while(otherIterator.hasNext()){
+            T key = otherIterator.next();
+            if(isMember(key))
+                intersection.put(key);
+        }
+        return intersection;
     }
 
     @Override
     public Set<T> difference(Set<T> set) {
-        return null;
+        Set<T> difference = new LinkedListSet<>();
+        Iterator<T> ownIterator = this.iterator();
+        while(ownIterator.hasNext()){
+            T key = ownIterator.next();
+            if(!set.isMember(key))
+                difference.put(key);
+        }
+        return difference;
     }
 
     @Override
     public boolean isMember(T key) {
         boolean isMember = false;
         if(firstContainer != null){
-            Container<T> currrentContainer = firstContainer;
-            while(!isMember && currrentContainer != null) {
-                if(currrentContainer.getValue().equals(key))
+            Container<T> currentContainer = firstContainer;
+            while(!isMember && currentContainer != null) {
+                if(currentContainer.getValue().equals(key))
                     isMember = true;
                 else
-                    currrentContainer = currrentContainer.getNext();
+                    currentContainer = currentContainer.getNext();
             }
         }
         return isMember;
@@ -48,16 +74,20 @@ public class LinkedListSet<T> implements Set<T> {
     @Override
     public void clear() {
         firstContainer = null;
+        storedObjects = 0;
     }
 
     @Override
     public void put(T key) {
-        Container<T> newContainer = new Container<>(key);
-        if(firstContainer == null)
-            firstContainer = newContainer;
-        else{
-            newContainer.setNext(firstContainer);
-            firstContainer = newContainer;
+        if(!isMember(key)){
+            Container<T> newContainer = new Container<>(key);
+            if(firstContainer == null)
+                firstContainer = newContainer;
+            else{
+                newContainer.setNext(firstContainer);
+                firstContainer = newContainer;
+            }
+            storedObjects++;
         }
     }
 
@@ -78,6 +108,7 @@ public class LinkedListSet<T> implements Set<T> {
                 }
                 currentContainer.setNext(currentContainer.getNext().getNext());
             }
+            storedObjects--;
         }
     }
 
@@ -88,7 +119,7 @@ public class LinkedListSet<T> implements Set<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new LinkedSetIterator<T>(firstContainer);
     }
 
     private class Container<E>{
@@ -113,6 +144,28 @@ public class LinkedListSet<T> implements Set<T> {
 
         public void setValue(E value) {
             this.value = value;
+        }
+    }
+
+    private class LinkedSetIterator<E> implements Iterator<E> {
+        private Container<E> currentContainer = null;
+        public LinkedSetIterator(Container<E> first){
+            currentContainer = first;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentContainer != null;
+        }
+
+        @Override
+        public E next() {
+            E toReturn = null;
+            if(currentContainer != null){
+                toReturn = currentContainer.getValue();
+                currentContainer = currentContainer.getNext();
+            }
+            return toReturn;
         }
     }
 }

@@ -13,6 +13,10 @@ public class PointerTreeNode<T> implements Node<T> {
     private PointerTreeNode<T> parent = null;
     private LinkedList<Node<T>> children = null;
 
+    public PointerTreeNode(T label){
+        this.label = label;
+    }
+
     @Override
     public void setLabel(T data) {
         label = data;
