@@ -2,6 +2,8 @@ package ucr.ac.cr.ecci.ci1221.util.collections.set;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.ArrayList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.stack.LinkedListStack;
+import ucr.ac.cr.ecci.ci1221.util.collections.stack.Stack;
 import ucr.ac.cr.ecci.ci1221.util.collections.tree.Tree;
 
 import java.util.Iterator;
@@ -199,40 +201,33 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
 
     private class BinaryTreeIterator<E> implements Iterator<E>{
 
-        private List<E> values = null;
-        private int size = 0;
-        private int currentIndex = 0;
+        private Stack<E> values = null;
 
         public BinaryTreeIterator(TreeNode<E> root){
-            values = new ArrayList<>();
+            values = new LinkedListStack<>();
             addNodes(values, root);
-            size = values.size();
         }
 
-        private void addNodes(List<E> list, TreeNode<E> node){
+        private void addNodes(Stack<E> stack, TreeNode<E> node){
             if(node != null){
-                if(node.getLeftSon() != null)
-                    addNodes(list, node.getLeftSon());
-                
-                list.add(node.getValue());
-
                 if(node.getRightSon() != null)
-                    addNodes(list, node.getRightSon());
+                    addNodes(stack, node.getRightSon());
+                stack.push(node.getValue());
+                if(node.getLeftSon() != null)
+                    addNodes(stack, node.getLeftSon());
             }
         }
 
         @Override
         public boolean hasNext() {
-            return currentIndex < size;
+            return !values.isEmpty();
         }
 
         @Override
         public E next() {
             E toReturn = null;
-            if(currentIndex < size){
-                toReturn = values.get(currentIndex);
-                currentIndex++;
-            }
+            if(!values.isEmpty())
+                toReturn = values.pop();
             return toReturn;
         }
     }
