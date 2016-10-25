@@ -1,5 +1,6 @@
 package ucr.ac.cr.ecci.ci1221.util.algorithm;
 
+import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.collections.tree.Node;
 import ucr.ac.cr.ecci.ci1221.util.collections.tree.Tree;

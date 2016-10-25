@@ -149,8 +149,8 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
                         simpleRightRotation(node.getParent());
                     else
                         doubleRightRotation(node.getParent());
-                }
-                repaint(node);
+                }else
+                    repaint(node);
             }else{
                 //Parent in the right side
                 if(node.getParent().getParent().getLeftSon() == null || !node.getParent().getParent().getLeftSon().isRed()){
@@ -159,8 +159,8 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
                         simpleLeftRotation(node.getParent());
                     else
                         doubleLeftRotation(node.getParent());
-                }
-                repaint(node);
+                }else
+                    repaint(node);
             }
         }
     }
@@ -173,20 +173,20 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
         if(node == root)
             node.setRed(false);
         else{
-            //Repaint parent to red
+            //Repaint parent to black
             node.getParent().setRed(false);
-            if(node.getParent().getParent() != null){
-                if(node.getParent() == node.getParent().getParent().getLeftSon())
-                    //Parent in the left side, Uncle in the right side
-                    node.getParent().getParent().getRightSon().setRed(false);
-                else
-                    //Parent in the right side, Uncle in the left side
-                    node.getParent().getParent().getLeftSon().setRed(false);
-                if(node.getParent().getParent() != root){
-                    //Repaint Grandparent if it is not the root and evaluating it
-                    node.getParent().getParent().setRed(true);
-                    evaluate(node.getParent().getParent());
-                }
+            if(node.getParent().getParent() != null) {
+                //Repaint uncle to black
+            if (node.getParent() == node.getParent().getParent().getLeftSon()){
+                //Parent in the left side, Uncle in the right side
+                node.getParent().getParent().getRightSon().setRed(false);
+            } else{
+                //Parent in the right side, Uncle in the left side
+                node.getParent().getParent().getLeftSon().setRed(false);
+            }
+            //Repaint Grandparent red and evaluate it
+            node.getParent().getParent().setRed(true);
+            evaluate(node.getParent().getParent());
             }
         }
     }
@@ -207,7 +207,7 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
             node.getParent().setLeftSon(node);
         node.getLeftSon().setParent(node);
         node.getLeftSon().setRed(true);
-        repaint(node.getLeftSon());
+        repaint(node.getRightSon());
     }
 
     /**
@@ -226,7 +226,7 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
             node.getParent().setRightSon(node);
         node.getRightSon().setParent(node);
         node.getRightSon().setRed(true);
-        repaint(node.getRightSon());
+        repaint(node.getLeftSon());
     }
 
     /**
