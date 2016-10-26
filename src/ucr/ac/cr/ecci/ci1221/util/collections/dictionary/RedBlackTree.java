@@ -207,7 +207,8 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
             node.getParent().setLeftSon(node);
         node.getLeftSon().setParent(node);
         node.getLeftSon().setRed(true);
-        repaint(node.getRightSon());
+        node.getRightSon().setRed(true);
+        node.setRed(false);
     }
 
     /**
@@ -226,7 +227,8 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
             node.getParent().setRightSon(node);
         node.getRightSon().setParent(node);
         node.getRightSon().setRed(true);
-        repaint(node.getLeftSon());
+        node.getLeftSon().setRed(true);
+        node.setRed(false);
     }
 
     /**
