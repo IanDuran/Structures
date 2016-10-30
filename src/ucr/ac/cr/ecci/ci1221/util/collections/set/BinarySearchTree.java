@@ -9,7 +9,7 @@ import ucr.ac.cr.ecci.ci1221.util.collections.tree.Tree;
 import java.util.Iterator;
 
 /**
- * @author Student Name
+ * @author Ian Duran
  */
 public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T> {
 

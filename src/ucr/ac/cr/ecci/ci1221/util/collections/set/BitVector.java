@@ -13,40 +13,42 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     @Override
     public EnumerableSet<T> union(EnumerableSet<T> set) {
-        return null;
+        EnumerableSet<T> union = new BitVector<>();
+        Iterator<T> ownIterator = this.iterator();
+        Iterator<T> otherIterator = set.iterator();
+        while(ownIterator.hasNext()){
+            union.put(ownIterator.next());
+        }
+        while(otherIterator.hasNext()){
+            T currentValue = otherIterator.next();
+            if(!union.isMember(currentValue))
+                union.put(currentValue);
+        }
+        return union;
     }
 
     @Override
     public EnumerableSet<T> intersection(EnumerableSet<T> set) {
-        EnumerableSet<T> newSet = new BitVector<>();
-        T[] ownElements = (T[]) new Enumerable[storedObjects];
-        T[] otherElements = (T[]) new Enumerable[set.size()];
-        Iterator<T> ownIterator = this.iterator();
+        EnumerableSet<T> intersection = new BitVector<>();
         Iterator<T> otherIterator = set.iterator();
-        int firstIndex = 0;
-        while(ownIterator.hasNext()){
-            ownElements[firstIndex] = ownIterator.next();
-            firstIndex++;
-        }
-        int secondIndex = 0;
         while(otherIterator.hasNext()){
-            otherElements[secondIndex] = otherIterator.next();
-            secondIndex++;
+            T currentValue = otherIterator.next();
+            if(this.isMember(currentValue))
+                intersection.put(currentValue);
         }
-        int firstSize = ownElements.length;
-        int secondSize = otherElements.length;
-        for(int i = 0; i < firstSize; i++){
-            for(int j = 0; j < secondSize; j++){
-                if(ownElements[i].equals(otherElements[j]))
-                    newSet.put(ownElements[i]);
-            }
-        }
-        return newSet;
+        return intersection;
     }
 
     @Override
     public EnumerableSet<T> difference(EnumerableSet<T> set) {
-        return null;
+        EnumerableSet<T> difference = new BitVector<>();
+        Iterator<T> ownIterator = this.iterator();
+        while(ownIterator.hasNext()){
+            T currentValue = ownIterator.next();
+            if(!set.isMember(currentValue))
+                difference.put(currentValue);
+        }
+        return difference;
     }
 
     @Override
@@ -67,14 +69,14 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     @Override
     public void put(T key) {
-        //if(!members[key.getIndex()]){
+        if(!members[key.getIndex()]){
         int index = key.getIndex();
         while(values.length <= index)
             enlarge();
         values[index] = key;
         members[index] = true;
         storedObjects++;
-        //}
+        }
     }
 
     @Override

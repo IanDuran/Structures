@@ -7,7 +7,6 @@ public class Person implements Enumerable, Comparable<Person> {
     private int index = 0;
     public Person(String name){
         this.name = name;
-        index = Index.getIndex();
     }
     @Override
     public int getIndex() {
