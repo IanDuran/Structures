@@ -128,12 +128,42 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                         currentNode = currentNode.getRightSon();
                 }
                 if(currentNode.getRightSon() == null && currentNode.getLeftSon() == null){
+                    // Node is a leaf
                     if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
                         currentNode.getParent().setRightSon(null);
                     else
                         currentNode.getParent().setLeftSon(null);
+                }else if(currentNode.getRightSon() != null && currentNode.getLeftSon() == null){
+                    //Node only has right son
+                    if(currentNode.getParent().getLeftSon() == currentNode){
+                        //Node is left child of parent
+                        currentNode.getParent().setLeftSon(currentNode.getRightSon());
+                    }else{
+                        //Node is right child of parent
+                        currentNode.getParent().setRightSon(currentNode.getRightSon());
+                    }
+                }else if(currentNode.getLeftSon() != null && currentNode.getRightSon() == null){
+                    //Node only has left son
+                    if(currentNode.getParent().getLeftSon() == currentNode){
+                        //Node is left child of parent
+                        currentNode.getParent().setLeftSon(currentNode.getLeftSon());
+                    }else{
+                        //Node is right child of parent
+                        currentNode.getParent().setRightSon(currentNode.getLeftSon());
+                    }
                 }else{
-
+                    //Node has two children
+                    TreeNode<T> toDelete = currentNode.getLeftSon();
+                    while(toDelete.getRightSon() != null)
+                        toDelete = toDelete.getRightSon();
+                    swap(currentNode, toDelete);
+                    if(toDelete.getParent().getLeftSon() == toDelete) {
+                        //Node to delete is left child of parent
+                        toDelete.getParent().setLeftSon(null);
+                    }else{
+                        //Node to delete is right child of parent
+                        toDelete.getParent().setRightSon(null);
+                    }
                 }
                 storedObjects--;
             }
