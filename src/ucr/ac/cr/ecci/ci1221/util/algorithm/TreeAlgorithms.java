@@ -2,15 +2,16 @@ package ucr.ac.cr.ecci.ci1221.util.algorithm;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.queue.LinkedListQueue;
+import ucr.ac.cr.ecci.ci1221.util.collections.queue.Queue;
+import ucr.ac.cr.ecci.ci1221.util.collections.stack.LinkedListStack;
+import ucr.ac.cr.ecci.ci1221.util.collections.stack.Stack;
 import ucr.ac.cr.ecci.ci1221.util.collections.tree.Node;
 import ucr.ac.cr.ecci.ci1221.util.collections.tree.Tree;
 
 /**
  * Utilitary class that provides algorithms for trees.
- *
- * @TODO Complete code implementations and javadoc.
- *
- * @author Student name.
+ * @author Ian Duran.
  */
 public class TreeAlgorithms {
 
@@ -22,7 +23,19 @@ public class TreeAlgorithms {
      * @return a list of the nodes of the tree in level order.
      */
     public static <T> List<Node<T>> getLevelTraversal(Tree<T> tree){
-        return null;
+        List<Node<T>> level = new LinkedList<>();
+        Queue<Node<T>> queue = new LinkedListQueue<>();
+        queue.enqueue(tree.getRoot());
+        while(!queue.isEmpty()){
+            Node<T> node = queue.dequeue();
+            List<Node<T>> children = node.getChildren();
+            if(children != null){
+                for(int i = 0; i < children.size(); i++)
+                    queue.enqueue(children.get(i));
+            }
+            level.add(node);
+        }
+        return level;
     }
 
     /**
@@ -33,7 +46,21 @@ public class TreeAlgorithms {
      * @return a list of the nodes of the tree in traversal order.
      */
     public static <T> List<Node<T>> getInDepthTraversal(Tree<T> tree){
-        return null;
+        List<Node<T>> inDepth = null;
+        if(!tree.isEmpty()){
+            inDepth = new LinkedList<Node<T>>();
+            depthTraversal(inDepth, tree.getRoot());
+        }
+        return inDepth;
+    }
+
+    private static <T> void depthTraversal(List<Node<T>> list, Node<T> node){
+        list.add(node);
+        List<Node<T>> children = node.getChildren();
+        if(children != null){
+            for(int i = 0; i < children.size(); i++)
+                depthTraversal(list, children.get(i));
+        }
     }
 
     /**
@@ -46,7 +73,31 @@ public class TreeAlgorithms {
      * @return a list of nodes.
      */
     public static <T> List<Node<T>> getLongestPathFromRootToAnyLeaf(Tree<T> tree){
-        return null;
+        List<Node<T>> longestPath = null;
+        if(!tree.isEmpty()){
+            longestPath = longestPath(tree.getRoot());
+            Stack<Node<T>> stack = new LinkedListStack<>();
+            for(int i = 0; i < longestPath.size(); i++)
+                stack.push(longestPath.get(i));
+            longestPath.clear();
+            while(!stack.isEmpty())
+                longestPath.add(stack.pop());
+        }
+        return longestPath;
+    }
+
+    private static <T> List<Node<T>> longestPath(Node<T> node){
+        List<Node<T>> path = new LinkedList<>();
+        List<Node<T>> children = node.getChildren();
+        if(children != null){
+            for(int i = 0; i < children.size(); i++){
+                List<Node<T>> prospectiveList = longestPath(children.get(i));
+                if(path.size() < prospectiveList.size())
+                    path = prospectiveList;
+            }
+        }
+        path.add(node);
+        return path;
     }
 
     /**
@@ -59,7 +110,24 @@ public class TreeAlgorithms {
      * @return tree height.
      */
     public static <T> int getHeight(Tree<T> tree){
-        return 0;
+        int height = 0;
+        if(!tree.isEmpty())
+            height = height(tree.getRoot()) - 1;
+        return height;
+    }
+
+    private static <T> int height(Node<T> node){
+        int height = 0;
+        List<Node<T>> children = node.getChildren();
+        if(children != null){
+            for(int i = 0; i < children.size(); i++){
+                int prospectiveHeight = height(children.get(i));
+                if(height < prospectiveHeight)
+                    height = prospectiveHeight;
+            }
+        }
+        height++;
+        return height;
     }
 
     /**
@@ -69,5 +137,10 @@ public class TreeAlgorithms {
      */
     public static <T> List<List<Node<T>>> getPathsFromRootToAnyLeaf(Tree<T> tree){
         return null;
+    }
+
+    private static <T> List<List<Node<T>>> paths(Node<T> node, List<Node<T>> currentPath){
+        List<List<Node<T>>> paths = new LinkedList<>();
+        return paths;
     }
 }
