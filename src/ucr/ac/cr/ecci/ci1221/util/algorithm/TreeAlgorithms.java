@@ -136,11 +136,26 @@ public class TreeAlgorithms {
      * @return list of list of nodes.
      */
     public static <T> List<List<Node<T>>> getPathsFromRootToAnyLeaf(Tree<T> tree){
-        return null;
+        List<List<Node<T>>> paths = new LinkedList<>();
+        paths(paths, tree.getRoot(), new LinkedList<Node<T>>());
+        return paths;
     }
 
-    private static <T> List<List<Node<T>>> paths(Node<T> node, List<Node<T>> currentPath){
-        List<List<Node<T>>> paths = new LinkedList<>();
-        return paths;
+    private static <T> void paths(List<List<Node<T>>> paths,Node<T> node, List<Node<T>> currentPath){
+        currentPath.add(node);
+        List<Node<T>> children = node.getChildren();
+        if(children != null){
+            for(int i = 0; i < children.size(); i++){
+                paths(paths, children.get(i), cloneList(currentPath));
+            }
+        }else
+            paths.add(currentPath);
+    }
+
+    private static <T> List<Node<T>> cloneList(List<Node<T>> otherList){
+        List<Node<T>> newList = new LinkedList<>();
+        for(int i = 0; i < otherList.size(); i++)
+            newList.add(otherList.get(i));
+        return newList;
     }
 }
