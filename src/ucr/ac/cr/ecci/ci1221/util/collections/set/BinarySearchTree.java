@@ -129,13 +129,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                 }
                 if(currentNode.getRightSon() == null && currentNode.getLeftSon() == null){
                     // Node is a leaf
-                    if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
+                    if(currentNode == root){
+                        root = null;
+                    }else if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
                         currentNode.getParent().setRightSon(null);
                     else
                         currentNode.getParent().setLeftSon(null);
                 }else if(currentNode.getRightSon() != null && currentNode.getLeftSon() == null){
                     //Node only has right son
-                    if(currentNode.getParent().getLeftSon() == currentNode){
+                    if(currentNode == root){
+                        root = root.getRightSon();
+                        root.setParent(null);
+                    }else if(currentNode.getParent().getLeftSon() == currentNode){
                         //Node is left child of parent
                         currentNode.getParent().setLeftSon(currentNode.getRightSon());
                     }else{
@@ -144,7 +149,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                     }
                 }else if(currentNode.getLeftSon() != null && currentNode.getRightSon() == null){
                     //Node only has left son
-                    if(currentNode.getParent().getLeftSon() == currentNode){
+                    if(currentNode == root){
+                        root = root.getLeftSon();
+                        root.setParent(null);
+                    }else if(currentNode.getParent().getLeftSon() == currentNode){
                         //Node is left child of parent
                         currentNode.getParent().setLeftSon(currentNode.getLeftSon());
                     }else{

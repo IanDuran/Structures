@@ -23,12 +23,14 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        boolean contained = false;
+        return contained;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return false;
+        boolean contained = false;
+        return contained;
     }
 
     @Override
@@ -85,8 +87,64 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
 
     @Override
     public V remove(K key) {
-        storedObjects--;
-        return null;
+        TreeNode<K, V> toRemove = getNode(root, key);
+        V toReturn = null;
+
+        return toReturn;
+    }
+
+    private TreeNode<K, V> getNode(TreeNode<K, V> node, K key){
+        TreeNode<K, V> toReturn = null;
+        if(node.getKey().compareTo(key) < 0){
+            if(node.getLeftSon() != null)
+                getNode(node.getLeftSon(), key);
+        }else if(node.getKey().compareTo(key) > 0){
+            if(node.getRightSon() != null)
+                getNode(node.getRightSon(), key);
+        }else{
+            toReturn = node;
+        }
+        return toReturn;
+    }
+
+    private void removeNode(TreeNode<K, V> node){
+        if(node.getRightSon() == null && node.getLeftSon() == null){
+            if(node == root)
+                root = null;
+            else if(node.getParent().getLeftSon() == node)
+                node.getParent().setLeftSon(null);
+            else
+                node.getParent().setRightSon(null);
+        }else if(node.getRightSon() != null && node.getLeftSon() == null){
+            if(node == root){
+                root = root.getRightSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node)
+                node.getParent().setLeftSon(node.getRightSon());
+            else
+                node.getParent().setRightSon(node.getRightSon());
+        }else if(node.getRightSon() == null && node.getLeftSon() != null){
+            if(node == root){
+                root = root.getLeftSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node)
+                node.getParent().setLeftSon(node.getLeftSon());
+            else
+                node.getParent().setRightSon(node.getLeftSon());
+        }else{
+            TreeNode<K, V> toDelete = node.getLeftSon();
+            while(toDelete.getRightSon() != null)
+                toDelete = toDelete.getRightSon();
+            node.setValue(toDelete.getValue());
+            if(toDelete.getParent().getLeftSon() == toDelete)
+                toDelete.getParent().setLeftSon(null);
+            else
+                toDelete.getParent().setRightSon(null);
+        }
+    }
+
+    private void doubleBlackDelete(TreeNode<K, V> node){
+
     }
 
     @Override
@@ -177,16 +235,16 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
             node.getParent().setRed(false);
             if(node.getParent().getParent() != null) {
                 //Repaint uncle to black
-            if (node.getParent() == node.getParent().getParent().getLeftSon()){
-                //Parent in the left side, Uncle in the right side
-                node.getParent().getParent().getRightSon().setRed(false);
-            } else{
-                //Parent in the right side, Uncle in the left side
-                node.getParent().getParent().getLeftSon().setRed(false);
-            }
-            //Repaint Grandparent red and evaluate it
-            node.getParent().getParent().setRed(true);
-            evaluate(node.getParent().getParent());
+                if (node.getParent() == node.getParent().getParent().getLeftSon()){
+                    //Parent in the left side, Uncle in the right side
+                    node.getParent().getParent().getRightSon().setRed(false);
+                } else{
+                    //Parent in the right side, Uncle in the left side
+                    node.getParent().getParent().getLeftSon().setRed(false);
+                }
+                //Repaint Grandparent red and evaluate it
+                node.getParent().getParent().setRed(true);
+                evaluate(node.getParent().getParent());
             }
         }
     }
@@ -264,6 +322,7 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
         private TreeNode<K, V> rightSon = null;
         private TreeNode<K, V> parent = null;
         private boolean red = true;
+        private boolean doubleBlack = false;
 
         public TreeNode(K key, V value){
             this.key = key;
@@ -308,6 +367,22 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
 
         public K getKey(){
             return key;
+        }
+
+        public void setValue(V value){
+            this.value = value;
+        }
+
+        public void setKey(K key){
+            this.key = key;
+        }
+
+        public boolean isDoubleBlack() {
+            return doubleBlack;
+        }
+
+        public void setDoubleBlack(boolean doubleBlack) {
+            this.doubleBlack = doubleBlack;
         }
     }
 }

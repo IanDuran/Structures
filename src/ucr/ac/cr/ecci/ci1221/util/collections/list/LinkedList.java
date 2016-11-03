@@ -50,11 +50,13 @@ public class LinkedList<E> implements List<E> {
      * to the Container next to the one at index and returns its value.
      * @throws IndexOutOfBoundsException if the index is not valid.
      * @param index the index used to calculate the next element.
-     * @return the E type object next to the one at index.
+     * @return the position next to the one at index.
      */
     @Override
     public int next(int index) {
-        return 0;
+        if(index < 0 ||index >= numElem - 1)
+            throw new IndexOutOfBoundsException();
+        return index + 1;
     }
 
     /**
@@ -67,7 +69,9 @@ public class LinkedList<E> implements List<E> {
      */
     @Override
     public int previous(int index) {
-        return 0;
+        if(index <= 0 || index >= numElem)
+            throw new IndexOutOfBoundsException();
+        return index - 1;
     }
 
     /**
