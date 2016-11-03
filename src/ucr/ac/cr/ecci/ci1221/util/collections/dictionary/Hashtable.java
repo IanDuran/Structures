@@ -8,7 +8,7 @@ import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 import java.util.ListIterator;
 
 /**
- * @author Student Name
+ * @author Ian Duran
  */
 public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
 

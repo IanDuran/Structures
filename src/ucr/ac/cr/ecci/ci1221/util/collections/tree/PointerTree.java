@@ -1,16 +1,14 @@
 package ucr.ac.cr.ecci.ci1221.util.collections.tree;
 
 /**
- * @author Student Name
+ * @author Ian Duran
  */
 public class PointerTree<T> implements Tree<T> {
 
-    /* @TODO add missing attributes and fill methods. */
-
-    PointerTreeNode<T> root = null;
+    private Node<T> root = null;
 
     public PointerTree(Node<T> root){
-        this.root = (PointerTreeNode)root;
+        this.root = root;
     }
 
     @Override

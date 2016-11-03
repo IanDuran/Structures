@@ -6,7 +6,7 @@ import ucr.ac.cr.ecci.ci1221.util.collections.set.BinarySearchTree;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 
 /**
- * @author Student Name
+ * @author Ian Duran
  */
 public class RedBlackTree<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
     private TreeNode<K, V> root = null;

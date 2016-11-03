@@ -2,8 +2,6 @@ package ucr.ac.cr.ecci.ci1221.util.collections.set;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.queue.LinkedListQueue;
 import ucr.ac.cr.ecci.ci1221.util.collections.queue.Queue;
-import ucr.ac.cr.ecci.ci1221.util.collections.stack.LinkedListStack;
-import ucr.ac.cr.ecci.ci1221.util.collections.stack.Stack;
 
 import java.util.Iterator;
 
@@ -14,6 +12,7 @@ public class Trie implements Set<String> {
 
     private TrieCharacter[] firstCharacters = new TrieCharacter[26];
     private int storedElements = 0;
+
     @Override
     public Set<String> union(Set<String> set) {
         Set<String> union = new Trie();
@@ -137,16 +136,16 @@ public class Trie implements Set<String> {
             int index = 0;
             for(int i = 0; i < values.length; i++)
                 if(values[i] != null)
-                    getWord(words, "", values, i);
+                    getWords(words, "", values, i);
         }
 
-        private void getWord(Queue<String> stack, String currentLetters, TrieCharacter[] values, int index){
+        private void getWords(Queue<String> stack, String currentLetters, TrieCharacter[] values, int index){
             currentLetters += values[index].getValue();
             TrieCharacter[] currentValues = values[index].getNextCharacters();
             if(currentValues != null){
                 for(int i = 0; i < values.length; i++){
                     if(currentValues[i] != null)
-                        getWord(stack, currentLetters, currentValues, i);
+                        getWords(stack, currentLetters, currentValues, i);
                 }
             }else{
                 stack.enqueue(currentLetters.substring(0, currentLetters.length() - 1));

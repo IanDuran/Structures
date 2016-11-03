@@ -20,9 +20,9 @@ public class LinkedListSet<T> implements Set<T> {
 
         while(otherIterator.hasNext()){
             T key = otherIterator.next();
-            if(!union.isMember(key)){
+            if(!union.isMember(key))
                 union.put(key);
-            }
+
         }
         return union;
     }

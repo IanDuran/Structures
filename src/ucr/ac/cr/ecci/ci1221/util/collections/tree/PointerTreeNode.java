@@ -7,8 +7,6 @@ import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
  */
 public class PointerTreeNode<T> implements Node<T> {
 
-    /* @TODO add missing attributes and fill methods. */
-
     private T label = null;
     private PointerTreeNode<T> parent = null;
     private LinkedList<Node<T>> children = null;
