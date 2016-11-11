@@ -21,7 +21,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
 
     public Hashtable(){
         keys = (K[]) new Comparable[INITIAL_SIZE];
-        values = (V[]) new Object[40];
+        values = (V[]) new Object[INITIAL_SIZE];
         size = 0;
         numOfKeys = 0;
     }
