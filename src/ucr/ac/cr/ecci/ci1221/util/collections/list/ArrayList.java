@@ -9,8 +9,18 @@ import java.util.Iterator;
  */
 public class ArrayList<E> implements List<E> {
 
-    private E[] list = (E[]) new Object[20];
-    private int storedElements = 0;
+    private final int INITIAL_SIZE = 20;
+    private final int AUGMENT_SIZE = 10;
+    private E[] list;
+    private int storedElements;
+
+    /**
+     * Constructor for the ArrayList class
+     */
+    public ArrayList(){
+        list = (E[]) new Object[INITIAL_SIZE];
+        storedElements = 0;
+    }
 
     /**
      * Returns the E type element in the index passed as parameter.
@@ -22,6 +32,7 @@ public class ArrayList<E> implements List<E> {
     public E get(int index) {
         if(index >= storedElements || index < 0)
             throw new IndexOutOfBoundsException();
+
         E toReturn = list[index];
         return toReturn;
     }
@@ -41,8 +52,8 @@ public class ArrayList<E> implements List<E> {
     public int next(int index) {
         if(index >= storedElements - 1 || index < 0)
             throw new IndexOutOfBoundsException();
-        //return list[index + 1];
-        return 0;
+
+        return index + 1;
     }
 
     /**
@@ -54,8 +65,8 @@ public class ArrayList<E> implements List<E> {
     public int previous(int index) {
         if(index >= storedElements || index < 1)
             throw new IndexOutOfBoundsException();
-        //return list[index - 1];
-        return 0;
+
+        return index - 1;
     }
 
     /**
@@ -71,8 +82,10 @@ public class ArrayList<E> implements List<E> {
     public E set(int index, E element) {
         if(index >= storedElements || index < 0)
              throw new IndexOutOfBoundsException();
+
         if(element == null)
             throw new NullPointerException();
+
         E toReturn = list[index];
         list[index] = element;
         return toReturn;
@@ -90,11 +103,14 @@ public class ArrayList<E> implements List<E> {
     public void add(int index, E element) {
         if(index > storedElements || index < 0)
             throw new IndexOutOfBoundsException();
+
         if(element == null)
             throw new NullPointerException();
+
         if(storedElements == list.length - 1)
-            enlarge();
-        moveUp(index);
+            this.enlarge();
+
+        this.moveUp(index);
         list[index] = element;
         storedElements++;
     }
@@ -110,8 +126,10 @@ public class ArrayList<E> implements List<E> {
         boolean isAdded = false;
         if(e == null)
             throw new NullPointerException();
+
         if(storedElements == list.length - 1)
-            enlarge();
+            this.enlarge();
+
         list[storedElements] = e;
         isAdded = true;
         storedElements++;
@@ -128,8 +146,9 @@ public class ArrayList<E> implements List<E> {
     public E remove(int index) {
         if(index >= list.length || index < 0)
             throw new IndexOutOfBoundsException();
+
         E toReturn = list[index];
-        moveDown(index);
+        this.moveDown(index);
         storedElements--;
         return toReturn;
     }
@@ -158,7 +177,7 @@ public class ArrayList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        list = (E[]) new Object[20];
+        list = (E[]) new Object[INITIAL_SIZE];
         storedElements = 0;
     }
 
@@ -176,9 +195,10 @@ public class ArrayList<E> implements List<E> {
      * assigns the new bigger array to the attribute one.
      */
     private void enlarge(){
-        E[] newArray = (E[]) new Object[list.length + 10];
+        E[] newArray = (E[]) new Object[list.length + AUGMENT_SIZE];
         for(int i = 0; i < list.length; i++)
             newArray[i] = list[i];
+
         list = newArray;
     }
 
@@ -200,7 +220,6 @@ public class ArrayList<E> implements List<E> {
     private void moveDown(int index){
         for(int i = index; i < storedElements; i++)
             list[i] = list[i + 1];
-
     }
 
     /**
@@ -232,11 +251,7 @@ public class ArrayList<E> implements List<E> {
          */
         @Override
         public boolean hasNext(){
-            boolean hasNext = false;
-            if(storedElements > 0 && storedElements > iteratorPosition){
-                hasNext = true;
-            }
-            return hasNext;
+            return storedElements > 0 && storedElements > iteratorPosition;
         }
 
         /**

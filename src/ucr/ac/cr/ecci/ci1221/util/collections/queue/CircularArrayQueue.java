@@ -6,10 +6,21 @@ package ucr.ac.cr.ecci.ci1221.util.collections.queue;
  * @author Ian Duran.
  */
 public class CircularArrayQueue<E> implements Queue<E> {
-    private E[] queue = (E[]) new Object[100];
-    private int write = -1;
-    private int read = -1;
-    private int storedObjects = 0;
+    private final int ARRAY_SIZE = 100;
+    private E[] queue;
+    private int write;
+    private int read;
+    private int storedObjects;
+
+    /**
+     * Constructor for the CircularArrayQueue class
+     */
+    public CircularArrayQueue(){
+        queue = (E[]) new Object[ARRAY_SIZE];
+        write = -1;
+        read = -1;
+        storedObjects = 0;
+    }
 
     /**
      * Adds a new object to the queue.
@@ -25,6 +36,7 @@ public class CircularArrayQueue<E> implements Queue<E> {
         queue[write] = element;
         if(read == - 1)
             read = write;
+
         storedObjects++;
     }
 
@@ -45,9 +57,9 @@ public class CircularArrayQueue<E> implements Queue<E> {
             if(read == write){
                 read = -1;
                 write = -1;
-            }else{
+            }else
                 read = (read + 1) % queue.length;
-            }
+
             storedObjects--;
         }
         return toReturn;
@@ -61,9 +73,9 @@ public class CircularArrayQueue<E> implements Queue<E> {
     @Override
     public E peek() {
         E toReturn = null;
-        if(read != - 1){
+        if(read != - 1)
             toReturn = queue[read];
-        }
+
         return toReturn;
     }
 
@@ -92,7 +104,7 @@ public class CircularArrayQueue<E> implements Queue<E> {
      */
     @Override
     public void clear() {
-        queue = (E[]) new Object[100];
+        queue = (E[]) new Object[ARRAY_SIZE];
         write = -1;
         read = -1;
         storedObjects = 0;

@@ -1,10 +1,7 @@
 package ucr.ac.cr.ecci.ci1221.util.collections.set;
 
-import ucr.ac.cr.ecci.ci1221.util.collections.list.ArrayList;
-import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.collections.stack.LinkedListStack;
 import ucr.ac.cr.ecci.ci1221.util.collections.stack.Stack;
-import ucr.ac.cr.ecci.ci1221.util.collections.tree.Tree;
 
 import java.util.Iterator;
 
@@ -13,8 +10,13 @@ import java.util.Iterator;
  */
 public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T> {
 
-    private TreeNode<T> root = null;
-    private int storedObjects = 0;
+    private TreeNode<T> root;
+    private int storedObjects;
+
+   public BinarySearchTree(){
+       root = null;
+       storedObjects = 0;
+   }
 
     @Override
     public Set<T> union(Set<T> set) {
@@ -26,9 +28,9 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
 
         while(otherIterator.hasNext()){
             T key = otherIterator.next();
-            if(!union.isMember(key)){
+            if(!union.isMember(key))
                 union.put(key);
-            }
+
         }
         return union;
     }
@@ -41,6 +43,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
             T key = otherIterator.next();
             if(isMember(key))
                 intersection.put(key);
+
         }
         return intersection;
     }
@@ -53,6 +56,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
             T key = ownIterator.next();
             if(!set.isMember(key))
                 difference.put(key);
+
         }
         return difference;
     }
@@ -64,12 +68,14 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
         while(currentNode != null && !isMember){
             if(currentNode.getValue().compareTo(key) == 0)
                 isMember = true;
+
             else{
-                if(currentNode.getValue().compareTo(key) >= 0){
+                if(currentNode.getValue().compareTo(key) >= 0)
                     currentNode = currentNode.getLeftSon();
-                }else{
+
+                else
                     currentNode = currentNode.getRightSon();
-                }
+
             }
         }
         return isMember;
@@ -92,8 +98,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
             TreeNode<T> newNode = new TreeNode<>(key);
             if(root == null)
                 root = newNode;
+
             else
-                put(root, newNode);
+                this.put(root, newNode);
+
             storedObjects++;
         }
     }
@@ -105,14 +113,16 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                 parent.setRightSon(node);
             }
             else
-                put(parent.getRightSon(), node);
+                this.put(parent.getRightSon(), node);
+
         }else{
             if(parent.getLeftSon() == null){
                 node.setParent(parent);
                 parent.setLeftSon(node);
             }
             else
-                put(parent.getLeftSon(), node);
+                this.put(parent.getLeftSon(), node);
+
         }
     }
 
@@ -124,54 +134,63 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                 while(currentNode.getValue().compareTo(key) != 0){
                     if(currentNode.getValue().compareTo(key) > 0)
                         currentNode = currentNode.getLeftSon();
+
                     else
                         currentNode = currentNode.getRightSon();
+
                 }
                 if(currentNode.getRightSon() == null && currentNode.getLeftSon() == null){
                     // Node is a leaf
-                    if(currentNode == root){
+                    if(currentNode == root)
                         root = null;
-                    }else if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
+
+                    else if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
                         currentNode.getParent().setRightSon(null);
+
                     else
                         currentNode.getParent().setLeftSon(null);
+
                 }else if(currentNode.getRightSon() != null && currentNode.getLeftSon() == null){
                     //Node only has right son
                     if(currentNode == root){
                         root = root.getRightSon();
                         root.setParent(null);
-                    }else if(currentNode.getParent().getLeftSon() == currentNode){
+                    }else if(currentNode.getParent().getLeftSon() == currentNode)
                         //Node is left child of parent
                         currentNode.getParent().setLeftSon(currentNode.getRightSon());
-                    }else{
+
+                    else
                         //Node is right child of parent
                         currentNode.getParent().setRightSon(currentNode.getRightSon());
-                    }
+
                 }else if(currentNode.getLeftSon() != null && currentNode.getRightSon() == null){
                     //Node only has left son
                     if(currentNode == root){
                         root = root.getLeftSon();
                         root.setParent(null);
-                    }else if(currentNode.getParent().getLeftSon() == currentNode){
+                    }else if(currentNode.getParent().getLeftSon() == currentNode)
                         //Node is left child of parent
                         currentNode.getParent().setLeftSon(currentNode.getLeftSon());
-                    }else{
+
+                    else
                         //Node is right child of parent
                         currentNode.getParent().setRightSon(currentNode.getLeftSon());
-                    }
+
                 }else{
                     //Node has two children
                     TreeNode<T> toDelete = currentNode.getLeftSon();
                     while(toDelete.getRightSon() != null)
                         toDelete = toDelete.getRightSon();
+
                     swap(currentNode, toDelete);
-                    if(toDelete.getParent().getLeftSon() == toDelete) {
+                    if(toDelete.getParent().getLeftSon() == toDelete)
                         //Node to delete is left child of parent
                         toDelete.getParent().setLeftSon(null);
-                    }else{
+
+                    else
                         //Node to delete is right child of parent
                         toDelete.getParent().setRightSon(null);
-                    }
+
                 }
                 storedObjects--;
             }
@@ -243,16 +262,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
 
         public BinaryTreeIterator(TreeNode<E> root){
             values = new LinkedListStack<>();
-            addNodes(values, root);
+            this.addNodes(values, root);
         }
 
         private void addNodes(Stack<E> stack, TreeNode<E> node){
             if(node != null){
                 if(node.getRightSon() != null)
-                    addNodes(stack, node.getRightSon());
+                    this.addNodes(stack, node.getRightSon());
+
                 stack.push(node.getValue());
                 if(node.getLeftSon() != null)
-                    addNodes(stack, node.getLeftSon());
+                    this.addNodes(stack, node.getLeftSon());
+
             }
         }
 
@@ -266,6 +287,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
             E toReturn = null;
             if(!values.isEmpty())
                 toReturn = values.pop();
+
             return toReturn;
         }
     }

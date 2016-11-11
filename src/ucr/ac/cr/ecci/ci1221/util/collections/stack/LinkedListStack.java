@@ -6,34 +6,40 @@ package ucr.ac.cr.ecci.ci1221.util.collections.stack;
  * @author Ian Duran
  */
 public class LinkedListStack<E> implements Stack<E> {
-    private Container<E> top;
-    private int numElem = 0;
+    private Node<E> top;
+    private int numElem;
+
+    public LinkedListStack(){
+        top = null;
+        numElem = 0;
+    }
 
     /**
      * Stores a new object in the top of the stack.
-     * First it creates a new Container with the value to be stored.
-     * Then, if the top Container is null, top is set to be the new Container.
-     * If top isn't null, the Container next to the new one is set to be top,
-     * and top is then set to be the new Container.
+     * First it creates a new Node with the value to be stored.
+     * Then, if the top Node is null, top is set to be the new Node.
+     * If top isn't null, the Node next to the new one is set to be top,
+     * and top is then set to be the new Node.
      * @param element the item to be pushed onto this stack.
      */
     @Override
     public void push(E element) {
-        Container<E> newContainer = new Container<>(element);
-        if(top == null){
-            top = newContainer;
-        }else{
-            newContainer.setNext(top);
-            top = newContainer;
+        Node<E> newNode = new Node<>(element);
+        if(top == null)
+            top = newNode;
+
+        else{
+            newNode.setNext(top);
+            top = newNode;
         }
         numElem++;
     }
 
     /**
      * Returns the object in the top of the stack.
-     * First it creates a return variable, then, if the top Container
+     * First it creates a return variable, then, if the top Node
      * isn't null, the return variable is set to be the value inside of
-     * the top Container, then top is set to be the Container next to it.
+     * the top Node, then top is set to be the Node next to it.
      * @return the object in top of the stack.
      */
     @Override
@@ -56,6 +62,7 @@ public class LinkedListStack<E> implements Stack<E> {
         E toReturn = null;
         if(top != null)
             toReturn = top.getValue();
+
         return toReturn;
     }
 
@@ -82,21 +89,20 @@ public class LinkedListStack<E> implements Stack<E> {
      */
     @Override
     public void clear() {
-        top.setNext(null);
         top = null;
         numElem = 0;
     }
 
     /**
-     * Container class for the Linked List Stack.
+     * Node class for the Linked List Stack.
      * @param <T> class of the objects stored in the stack
      * @author Ian Duran
      */
-    private class Container<T>{
+    private class Node<T>{
         private T value;
-        private Container<T> next;
+        private Node<T> next;
 
-        public Container(T value){
+        public Node(T value){
             this.value = value;
             this.next = null;
         }
@@ -105,11 +111,11 @@ public class LinkedListStack<E> implements Stack<E> {
             return value;
         }
 
-        public Container<T> getNext() {
+        public Node<T> getNext() {
             return next;
         }
 
-        public void setNext(Container<T> next) {
+        public void setNext(Node<T> next) {
             this.next = next;
         }
     }

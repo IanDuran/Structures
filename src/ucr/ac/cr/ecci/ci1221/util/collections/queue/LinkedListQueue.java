@@ -8,27 +8,37 @@ package ucr.ac.cr.ecci.ci1221.util.collections.queue;
  */
 public class LinkedListQueue<E> implements Queue<E> {
 
-    private Container<E> tail = null;
-    private Container<E> head = null;
-    private int numElem = 0;
+    private Node<E> tail;
+    private Node<E> head;
+    private int numElem;
+
+    /**
+     * Constructor for the LinkedListQueue class
+     */
+    public LinkedListQueue(){
+        tail = null;
+        head = null;
+        numElem = 0;
+    }
+
 
     /**
      * Adds a new object to the queue.
-     * First it creates a new Container and sets its value to be the object that will be added.
-     * Then, if the list is empty, head and tail are set to be equal to the new Container.
-     * Otherwise, the Container next to the new one is set to be tail, and tail is set to be the new
-     * Container.
+     * First it creates a new Node and sets its value to be the object that will be added.
+     * Then, if the list is empty, head and tail are set to be equal to the new Node.
+     * Otherwise, the Node next to the new one is set to be tail, and tail is set to be the new
+     * Node.
      * @param element the element to add
      */
     @Override
     public void enqueue(E element) {
-        Container<E> newContainer = new Container<>(element);
+        Node<E> newNode = new Node<>(element);
         if(head == null && tail == null){
-            head = newContainer;
-            tail = newContainer;
+            head = newNode;
+            tail = newNode;
         }else{
-            newContainer.setNext(tail);
-            tail = newContainer;
+            newNode.setNext(tail);
+            tail = newNode;
         }
         numElem++;
     }
@@ -38,9 +48,9 @@ public class LinkedListQueue<E> implements Queue<E> {
      * First it creates a return variable and sets it to null, then it checks if the
      * list is empty. If its not, the return variable is set to be the value inside head.
      * Then, if head was the last item in the queue, then tail and head are set to null.
-     * If there were more, it goes into a loop until the Container before head is reached
-     * and erases its next Container (i.e. current head), then head is set to be this
-     * Container.
+     * If there were more, it goes into a loop until the Node before head is reached
+     * and erases its next Node (i.e. current head), then head is set to be this
+     * Node.
      * @return the next object in the queue.
      */
     @Override
@@ -48,15 +58,16 @@ public class LinkedListQueue<E> implements Queue<E> {
         E toReturn = null;
         if(tail != null && head != null){
             toReturn = head.getValue();
-            if(head == tail){
+            if(head == tail)
                 head = tail = null;
-            }else{
-                Container<E> currentContainer = tail;
-                while(currentContainer.getNext() != head){
-                    currentContainer = currentContainer.getNext();
-                }
-                currentContainer.setNext(null);
-                head = currentContainer;
+
+            else{
+                Node<E> currentNode = tail;
+                while(currentNode.getNext() != head)
+                    currentNode = currentNode.getNext();
+
+                currentNode.setNext(null);
+                head = currentNode;
             }
 
         }
@@ -73,6 +84,7 @@ public class LinkedListQueue<E> implements Queue<E> {
         E toReturn = null;
         if(head != null && tail != null)
             toReturn = head.getValue();
+
         return toReturn;
     }
 
@@ -99,22 +111,21 @@ public class LinkedListQueue<E> implements Queue<E> {
      */
     @Override
     public void clear() {
-        tail.setNext(null);
         tail = null;
         head = null;
         numElem = 0;
     }
 
     /**
-     * Container class for the queue.
+     * Node class for the queue.
      * This class contains the objects that will be sotred in the queue.
      * @param <T>
      * @author Ian Duran
      */
-    private class Container<T>{
+    private class Node<T>{
         private T value;
-        private Container<T> next;
-        public Container(T value){
+        private Node<T> next;
+        public Node(T value){
             this.value = value;
             this.next = null;
         }
@@ -127,11 +138,11 @@ public class LinkedListQueue<E> implements Queue<E> {
             this.value = value;
         }
 
-        public Container<T> getNext() {
+        public Node<T> getNext() {
             return next;
         }
 
-        public void setNext(Container<T> next) {
+        public void setNext(Node<T> next) {
             this.next = next;
         }
     }

@@ -10,8 +10,13 @@ import java.util.Iterator;
  */
 public class Trie implements Set<String> {
 
-    private TrieCharacter[] firstCharacters = new TrieCharacter[26];
-    private int storedElements = 0;
+    private TrieCharacter[] firstCharacters;
+    private int storedElements;
+
+    public Trie(){
+        firstCharacters = new TrieCharacter[256];
+        storedElements = 0;
+    }
 
     @Override
     public Set<String> union(Set<String> set) {
@@ -20,10 +25,12 @@ public class Trie implements Set<String> {
         Iterator<String> otherIterator = set.iterator();
         while(ownIterator.hasNext())
             union.put(ownIterator.next());
+
         while(otherIterator.hasNext()){
             String value = otherIterator.next();
             if(!union.isMember(value))
                 union.put(value);
+
         }
         return union;
     }
@@ -55,15 +62,20 @@ public class Trie implements Set<String> {
     @Override
     public boolean isMember(String key) {
         boolean isMember = true;
-        TrieCharacter[] currentSet = firstCharacters;
-        for(int i = 0; i < key.length(); i++){
-            if(currentSet[(int) key.charAt(i) - 97] == null || currentSet[(int) key.charAt(i) - 97].getValue() != key.charAt(i))
-                isMember = false;
-            if(currentSet[(int) key.charAt(i) - 97] != null)
-                currentSet = currentSet[(int) key.charAt(i) - 97].getNextCharacters();
-        }
-        if(currentSet[currentSet.length - 1] == null)
+        if(this.isEmpty())
             isMember = false;
+
+        else{
+            TrieCharacter[] currentSet = firstCharacters;
+            for(int i = 0; i < key.length(); i++){
+                if(currentSet[(int) key.charAt(i)] == null || currentSet[(int) key.charAt(i)].getValue() != key.charAt(i))
+                    isMember = false;
+                if(currentSet[(int) key.charAt(i)] != null)
+                    currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
+            }
+            if(currentSet[currentSet.length - 1] == null)
+                isMember = false;
+        }
         return isMember;
     }
 
@@ -71,11 +83,12 @@ public class Trie implements Set<String> {
     public void put(String key) {
         TrieCharacter[] currentSet = firstCharacters;
         for(int i = 0; i < key.length(); i++){
-            if(currentSet[(int)key.charAt(i) - 97] == null)
-                currentSet[(int) key.charAt(i) - 97] = new TrieCharacter(key.charAt(i));
-            currentSet = currentSet[(int) key.charAt(i) - 97].getNextCharacters();
+            if(currentSet[(int)key.charAt(i)] == null)
+                currentSet[(int) key.charAt(i)] = new TrieCharacter(key.charAt(i));
+
+            currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
         }
-        currentSet[currentSet.length - 1] = new TrieCharacter('$');
+        currentSet[0] = new TrieCharacter((char)0);
         storedElements++;
     }
 
@@ -91,7 +104,7 @@ public class Trie implements Set<String> {
 
     @Override
     public void clear() {
-        firstCharacters = new TrieCharacter[26];
+        firstCharacters = new TrieCharacter[256];
         storedElements = 0;
     }
 
@@ -111,8 +124,9 @@ public class Trie implements Set<String> {
 
         public TrieCharacter(Character value){
             this.value = value;
-            if(value != '$')
-                nextCharacters = new TrieCharacter[27];
+            if(value != 0)
+                nextCharacters = new TrieCharacter[256];
+
         }
 
         public Character getValue() {
@@ -133,10 +147,9 @@ public class Trie implements Set<String> {
 
         public TrieIterator(TrieCharacter[] values){
             words = new LinkedListQueue<>();
-            int index = 0;
             for(int i = 0; i < values.length; i++)
                 if(values[i] != null)
-                    getWords(words, "", values, i);
+                    this.getWords(words, "", values, i);
         }
 
         private void getWords(Queue<String> stack, String currentLetters, TrieCharacter[] values, int index){
@@ -154,10 +167,7 @@ public class Trie implements Set<String> {
 
         @Override
         public boolean hasNext() {
-            boolean hasNext = false;
-            if(!words.isEmpty())
-                hasNext = true;
-            return hasNext;
+            return !words.isEmpty();
         }
 
         @Override

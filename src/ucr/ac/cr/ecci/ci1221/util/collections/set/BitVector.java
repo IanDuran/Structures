@@ -7,22 +7,29 @@ import java.util.Iterator;
  */
 public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
+    private final int INITIAL_SIZE = 20;
     private boolean[] members = new boolean[20];
     private T[] values = (T[]) new Enumerable[20];
     private int storedObjects = 0;
+
+    public BitVector(){
+        members = new boolean[INITIAL_SIZE];
+        values = (T[]) new Enumerable[INITIAL_SIZE];
+    }
 
     @Override
     public EnumerableSet<T> union(EnumerableSet<T> set) {
         EnumerableSet<T> union = new BitVector<>();
         Iterator<T> ownIterator = this.iterator();
         Iterator<T> otherIterator = set.iterator();
-        while(ownIterator.hasNext()){
+        while(ownIterator.hasNext())
             union.put(ownIterator.next());
-        }
+
         while(otherIterator.hasNext()){
             T currentValue = otherIterator.next();
             if(!union.isMember(currentValue))
                 union.put(currentValue);
+
         }
         return union;
     }
@@ -35,6 +42,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
             T currentValue = otherIterator.next();
             if(this.isMember(currentValue))
                 intersection.put(currentValue);
+
         }
         return intersection;
     }
@@ -47,6 +55,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
             T currentValue = ownIterator.next();
             if(!set.isMember(currentValue))
                 difference.put(currentValue);
+
         }
         return difference;
     }
@@ -63,19 +72,20 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     @Override
     public void clear() {
-        members = new boolean[20];
-        values = (T[]) new Enumerable[20];
+        members = new boolean[INITIAL_SIZE];
+        values = (T[]) new Enumerable[INITIAL_SIZE];
     }
 
     @Override
     public void put(T key) {
-        if(!members[key.getIndex()]){
-        int index = key.getIndex();
-        while(values.length <= index)
-            enlarge();
-        values[index] = key;
-        members[index] = true;
-        storedObjects++;
+        if (!members[key.getIndex()]) {
+            int index = key.getIndex();
+            while (values.length <= index)
+                this.enlarge();
+
+            values[index] = key;
+            members[index] = true;
+            storedObjects++;
         }
     }
 
@@ -124,11 +134,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
         @Override
         public boolean hasNext() {
-            boolean hasNext = false;
-            if(currentIndex < members.length)
-                if(members[currentIndex])
-                    hasNext = true;
-            return hasNext;
+            return currentIndex < members.length && members[currentIndex];
         }
 
         @Override
@@ -139,6 +145,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
                 currentIndex++;
                 while(currentIndex < members.length && !members[currentIndex])
                     currentIndex++;
+
             }
             return toReturn;
         }

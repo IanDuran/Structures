@@ -7,8 +7,15 @@ package ucr.ac.cr.ecci.ci1221.util.collections.stack;
  * @author Ian Duran
  */
 public class ArrayStack<E> implements Stack<E>{
-    private E[] stack = (E[]) new Object[20];
-    private int storedElements = 0;
+    private final int INITIAL_SIZE = 20;
+    private final int ENLARGING_SIZE = 10;
+    private E[] stack;
+    private int storedElements;
+
+    public ArrayStack(){
+        stack = (E[]) new Object[INITIAL_SIZE];
+        storedElements = 0;
+    }
 
     /**
      * Inserts an object in the top of the stack.
@@ -19,11 +26,12 @@ public class ArrayStack<E> implements Stack<E>{
      */
     @Override
     public void push(E element) {
-        if(storedElements == stack.length - 1){
-            enlarge();
-        }
+        if(storedElements == stack.length - 1)
+            this.enlarge();
+
         if(storedElements > 0)
-            moveUp();
+            this.moveUp();
+
         stack[0] = element;
         storedElements++;
     }
@@ -39,7 +47,7 @@ public class ArrayStack<E> implements Stack<E>{
     @Override
     public E pop() {
         E toReturn = stack[0];
-        moveDown();
+        this.moveDown();
         storedElements--;
         return toReturn;
     }
@@ -78,7 +86,7 @@ public class ArrayStack<E> implements Stack<E>{
      */
     @Override
     public void clear() {
-        stack = (E[]) new Object[20];
+        stack = (E[]) new Object[INITIAL_SIZE];
         storedElements = 0;
     }
 
@@ -88,10 +96,11 @@ public class ArrayStack<E> implements Stack<E>{
      * Then the attribute array is set to be the new one.
      */
     private void enlarge(){
-        E[] newArray = (E[]) new Object[stack.length + 10];
+        E[] newArray = (E[]) new Object[stack.length + ENLARGING_SIZE];
         int size = stack.length;
         for(int i = 0; i < size; i++)
             newArray[i] = stack[i];
+
         stack = newArray;
     }
 
@@ -100,9 +109,9 @@ public class ArrayStack<E> implements Stack<E>{
      * so it could be given a new value without losing previous values.
      */
     private void moveUp(){
-        for(int i = storedElements; i >= 1; i--){
+        for(int i = storedElements; i >= 1; i--)
             stack[i] = stack[i - 1];
-        }
+
     }
 
     /**
@@ -110,8 +119,7 @@ public class ArrayStack<E> implements Stack<E>{
      * stack array.
      */
     private void moveDown(){
-        for(int i = 1; i < storedElements; i++){
+        for(int i = 1; i < storedElements; i++)
             stack[i - 1] = stack[i];
-        }
     }
 }

@@ -12,23 +12,33 @@ import java.util.ListIterator;
  */
 public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
 
-    private K[] keys = (K[]) new Comparable[20];
-    private V[][] values = (V[][]) new Object[20][2];
+    private final int INITIAL_SIZE = 40;
+    private final int INITIAL_SUBARRAY_SIZE = 1;
+    private K[] keys;
+    private V[] values;
+    private int size;
+    private int numOfKeys;
+
+    public Hashtable(){
+        keys = (K[]) new Comparable[INITIAL_SIZE];
+        values = (V[]) new Object[40];
+        size = 0;
+        numOfKeys = 0;
+    }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public boolean containsKey(Object key) {
-
-        return false;
+        return values[key.hashCode() % values.length] != null;
     }
 
     @Override
@@ -38,29 +48,52 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
 
     @Override
     public V get(K key) {
-        return null;
+        return values[key.hashCode() % values.length];
     }
 
     @Override
     public V put(K key, V value) {
-        return null;
+        V toReturn = null;
+        int bucket = key.hashCode() % values.length;
+        if(values[bucket] != null)
+            toReturn = values[bucket];
+        else{
+            size++;
+            keys[numOfKeys] = key;
+            numOfKeys++;
+        }
+        values[bucket] = value;
+        return toReturn;
     }
 
     @Override
     public V remove(K key) {
-        return null;
+        int bucket = key.hashCode() % values.length;
+        V toReturn = values[bucket];
+        if(toReturn != null){
+            values[bucket] = null;
+            int index = 0;
+            for(int i = 0; i < numOfKeys; i++)
+                if(keys[i].compareTo(key) == 0)
+                    index = i;
+            moveDown(index);
+            numOfKeys--;
+        }
+        return toReturn;
     }
 
     @Override
     public void clear() {
-        keys = (K[]) new Comparable[20];
-        values = (V[][]) new Object[20][2];
+        keys = (K[]) new Comparable[40];
+        values = (V[]) new Object[40];
+        numOfKeys = 0;
+        size = 0;
     }
 
     @Override
     public Set<K> keySet() {
         Set<K> keySet = new BinarySearchTree<>();
-        for(int i = 0; i < keys.length;i++){
+        for(int i = 0; i < numOfKeys;i++){
             if(keys[i] != null)
                 keySet.put(keys[i]);
         }
@@ -71,11 +104,14 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
     public List<V> values() {
         List<V> valuesList = new LinkedList<>();
         for(int i = 0; i < values.length; i++){
-            for(int j = 0; j < values[i].length; j++) {
-                if(values[i][j] != null)
-                    valuesList.add(values[i][j]);
-            }
+            if(values[i] != null)
+                valuesList.add(values[i]);
         }
         return valuesList;
+    }
+
+    private void moveDown(int index){
+        for(int i = index; i < numOfKeys; i++)
+            keys[i] = keys[i + 1];
     }
 }

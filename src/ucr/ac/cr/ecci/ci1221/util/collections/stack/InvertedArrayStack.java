@@ -7,8 +7,14 @@ package ucr.ac.cr.ecci.ci1221.util.collections.stack;
  * @author Ian Duran
  */
 public class InvertedArrayStack<E> implements Stack<E> {
-    private E[] stack = (E[]) new Object[20];
-    private int storedElements = 0;
+    private final int INITIAL_SIZE = 20;
+    private E[] stack;
+    private int storedElements;
+
+    public InvertedArrayStack(){
+        stack = (E[]) new Object[INITIAL_SIZE];
+        storedElements = 0;
+    }
 
     /**
      * Adds an element in top of the Stack
@@ -17,7 +23,8 @@ public class InvertedArrayStack<E> implements Stack<E> {
     @Override
     public void push(E element) {
         if(storedElements == stack.length - 1)
-            enlarge();
+            this.enlarge();
+
         stack[storedElements] = element;
         storedElements++;
     }
@@ -68,7 +75,7 @@ public class InvertedArrayStack<E> implements Stack<E> {
      */
     @Override
     public void clear() {
-        stack = (E[]) new Object[20];
+        stack = (E[]) new Object[INITIAL_SIZE];
         storedElements = 0;
     }
 
@@ -79,9 +86,9 @@ public class InvertedArrayStack<E> implements Stack<E> {
      */
     public void enlarge(){
         E[] newArray = (E[]) new Object[stack.length + 10];
-        for(int i = 0; i < stack.length; i++){
+        for(int i = 0; i < stack.length; i++)
             newArray[i] = stack[i];
-        }
+
         stack = newArray;
     }
 }

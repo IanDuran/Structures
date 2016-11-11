@@ -7,8 +7,17 @@ package ucr.ac.cr.ecci.ci1221.util.collections.queue;
  * @author Ian Duran
  */
 public class ArrayQueue<E> implements Queue<E> {
-    private E[] queue = (E[]) new Object[20];
-    private int storedObjects = 0;
+    private final int INITIAL_SIZE = 20;
+    private E[] queue;
+    private int storedObjects;
+
+    /**
+     * Constructor for the ArrayQueue class
+     */
+    public ArrayQueue(){
+        queue = (E[]) new Object[INITIAL_SIZE];
+        storedObjects = 0;
+    }
 
     /**
      * Adds a new object to the queue.
@@ -21,8 +30,9 @@ public class ArrayQueue<E> implements Queue<E> {
     @Override
     public void enqueue(E element) {
         if(storedObjects == queue.length - 1)
-            enlarge();
-        moveUp();
+            this.enlarge();
+
+        this.moveUp();
         queue[0] = element;
         storedObjects++;
     }
@@ -39,6 +49,7 @@ public class ArrayQueue<E> implements Queue<E> {
         E toReturn = null;
         if(storedObjects > 0)
             toReturn = queue[storedObjects - 1];
+
         storedObjects--;
         return toReturn;
     }
@@ -52,6 +63,7 @@ public class ArrayQueue<E> implements Queue<E> {
         E toReturn = null;
         if(storedObjects > 0)
             toReturn = queue[storedObjects - 1];
+
         return toReturn;
     }
 
@@ -92,6 +104,7 @@ public class ArrayQueue<E> implements Queue<E> {
         E[] newArray = (E[]) new Object[queue.length + 10];
         for(int i = 0; i < queue.length; i++)
             newArray[i] = queue[i];
+
         queue = newArray;
     }
 
