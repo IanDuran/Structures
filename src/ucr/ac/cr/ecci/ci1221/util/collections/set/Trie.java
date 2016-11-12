@@ -73,7 +73,7 @@ public class Trie implements Set<String> {
                 if(currentSet[(int) key.charAt(i)] != null)
                     currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
             }
-            if(currentSet[currentSet.length - 1] == null)
+            if(currentSet[0] == null)
                 isMember = false;
         }
         return isMember;
@@ -81,20 +81,34 @@ public class Trie implements Set<String> {
 
     @Override
     public void put(String key) {
-        TrieCharacter[] currentSet = firstCharacters;
-        for(int i = 0; i < key.length(); i++){
-            if(currentSet[(int)key.charAt(i)] == null)
-                currentSet[(int) key.charAt(i)] = new TrieCharacter(key.charAt(i));
+        if(!this.isMember(key)){
+            TrieCharacter[] currentSet = firstCharacters;
+            for(int i = 0; i < key.length(); i++){
+                if(currentSet[(int)key.charAt(i)] == null)
+                    currentSet[(int) key.charAt(i)] = new TrieCharacter(key.charAt(i));
 
-            currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
+                currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
+            }
+            currentSet[0] = new TrieCharacter((char)0);
+            storedElements++;
         }
-        currentSet[0] = new TrieCharacter((char)0);
-        storedElements++;
     }
 
     @Override
     public void remove(String key) {
+        if(this.isMember(key)){
+            if (storedElements == 1)
+                this.clear();
 
+            else {
+                TrieCharacter[] currentSet = firstCharacters;
+                for (int i = 0; i < key.length(); i++)
+                    currentSet = currentSet[(int) key.charAt(i)].getNextCharacters();
+
+                currentSet[0] = null;
+            }
+            storedElements--;
+        }
     }
 
     @Override
@@ -158,7 +172,7 @@ public class Trie implements Set<String> {
             if(currentValues != null){
                 for(int i = 0; i < values.length; i++){
                     if(currentValues[i] != null)
-                        getWords(stack, currentLetters, currentValues, i);
+                        this.getWords(stack, currentLetters, currentValues, i);
                 }
             }else{
                 stack.enqueue(currentLetters.substring(0, currentLetters.length() - 1));

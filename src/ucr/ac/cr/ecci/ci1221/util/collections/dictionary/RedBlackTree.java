@@ -5,6 +5,8 @@ import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.BinarySearchTree;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 
+import java.util.Objects;
+
 /**
  * @author Ian Duran
  */
@@ -29,12 +31,7 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
 
     @Override
     public boolean containsKey(Object key) {
-        boolean contained = false;
-        if(key instanceof Comparable)
-            if(this.get((K)key) != null)
-                contained = true;
-
-        return contained;
+        return key instanceof Comparable && this.get((K)key) != null;
     }
 
     @Override
