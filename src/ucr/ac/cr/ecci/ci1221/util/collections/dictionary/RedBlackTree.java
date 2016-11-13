@@ -58,7 +58,27 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
     @Override
     public boolean containsValue(Object value) {
         boolean contained = false;
+        try{
+            V castValue = (V) value;
+            contained = this.isContained(root, castValue);
+        }catch(ClassCastException e){
+            contained = false;
+        }
+        return contained;
+    }
 
+    private boolean isContained(TreeNode<K, V> node, V value){
+        boolean contained = false;
+        if(node.getValue().equals(value))
+            contained = true;
+
+        else{
+            if(!contained && node.getLeftSon() != null)
+                contained = isContained(node.getLeftSon(), value);
+
+            if(!contained && node.getRightSon() != null)
+                contained = isContained(node.getRightSon(), value);
+        }
         return contained;
     }
 
@@ -84,15 +104,15 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
     private V get(TreeNode<K, V> node, K key){
         V toReturn = null;
         if(node != null){
-            if(node.getKey().compareTo(key) < 0)
-                if(node.getRightSon() != null)
+            if(node.getKey().compareTo(key) < 0) {
+                if (node.getRightSon() != null)
                     toReturn = this.get(node.getRightSon(), key);
 
-            else if(node.getKey().compareTo(key) > 0)
-                if(node.getLeftSon() != null)
+            }else if(node.getKey().compareTo(key) > 0) {
+                if (node.getLeftSon() != null)
                     toReturn = this.get(node.getLeftSon(), key);
 
-            else
+            }else
                 toReturn = node.getValue();
 
         }

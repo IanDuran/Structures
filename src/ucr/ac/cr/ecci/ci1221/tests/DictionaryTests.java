@@ -9,13 +9,19 @@ import java.util.Iterator;
 public class DictionaryTests {
     public void hashTableTests(){
         Dictionary<Integer, String> ht = new Hashtable<>();
+        ht.put(2, "Bruh");
+        ht.put(1, "Broh");
+        System.out.println(ht.containsKey(5));
     }
 
     public void redBlackTests(){
         Dictionary<Integer, String> rbt = new RedBlackTree<>();
+        System.out.println(rbt.containsKey(1));
     }
 
     public static void main(String[] args) {
-
+        DictionaryTests dt = new DictionaryTests();
+        //dt.redBlackTests();
+        dt.hashTableTests();
     }
 }

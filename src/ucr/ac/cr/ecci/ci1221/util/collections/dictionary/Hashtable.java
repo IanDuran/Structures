@@ -54,7 +54,14 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
      */
     @Override
     public boolean containsKey(Object key) {
-        return values[key.hashCode() % values.length] != null;
+        boolean isContained = false;
+        if(key instanceof Comparable){
+            for(int i = 0; i < numOfKeys; i++)
+                if(keys[i].compareTo((K)key) == 0)
+                    isContained = true;
+
+        }
+        return isContained;
     }
 
     /**
@@ -64,7 +71,18 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
      */
     @Override
     public boolean containsValue(Object value) {
-        return false;
+        boolean isContained = false;
+        try{
+            V castValue = (V) value;
+            for(int i = 0; i < values.length; i++)
+                for(int j = 0; j < values[i].length; j++)
+                    if(values[i][j] != null && values[i][j].equals(castValue))
+                        isContained = true;
+
+        }catch(ClassCastException e) {
+            isContained = false;
+        }
+        return isContained;
     }
 
     /**
