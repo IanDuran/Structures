@@ -185,7 +185,7 @@ public class BitVector<T extends Enumerable> implements EnumerableSet<T> {
 
     /**
      * Iterator class for the Bit Vector
-     * @param <E>
+     * @param <E> class that is being stored in the Bit Vector
      */
     private class BitVectorIterator<E> implements Iterator<E>{
         private boolean[] members = null;

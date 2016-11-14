@@ -16,12 +16,16 @@ public class DictionaryTests {
 
     public void redBlackTests(){
         Dictionary<Integer, String> rbt = new RedBlackTree<>();
-        System.out.println(rbt.containsKey(1));
+        rbt.put(30, "qwerty");
+        rbt.put(99, "asdf");
+        rbt.put(100, "wewewe");
+        rbt.remove(100);
+        //System.out.println(rbt.containsKey(10));
     }
 
     public static void main(String[] args) {
         DictionaryTests dt = new DictionaryTests();
-        //dt.redBlackTests();
-        dt.hashTableTests();
+        dt.redBlackTests();
+        //dt.hashTableTests();
     }
 }

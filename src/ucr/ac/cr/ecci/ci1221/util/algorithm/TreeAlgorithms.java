@@ -21,6 +21,7 @@ public class TreeAlgorithms {
      * dequeuing the next node and enqueuing all of it's children, finally it inserts the node in the list. When the loop ends
      *, all the Nodes are inside the list in level order.
      * @param tree the tree.
+     * @param <T> class stored inside the Tree
      * @return a list of the nodes of the tree in level order.
      */
     public static <T> List<Node<T>> getLevelTraversal(Tree<T> tree){
@@ -44,7 +45,7 @@ public class TreeAlgorithms {
      * It uses the generalization of the Tree traversal to return the list with all the nodes
      * using the In-Depth-Traversal.
      * @param tree the tree.
-     *
+     * @param <T> class stored inside the Tree
      * @return a list of the nodes of the tree in traversal order.
      */
     public static <T> List<Node<T>> getInDepthTraversal(Tree<T> tree){
@@ -164,6 +165,8 @@ public class TreeAlgorithms {
      * A list of list of nodes representing all the possible paths from the root to each node of the tree.
      * It creates a list of lists that contain nodes. Then, it checks if the tree is empty. If its not,
      * it call the private recursive method to get all the paths from the root to the leaves.
+     * @param <T> class stored inside the Tree
+     * @param tree Tree from which to get the paths
      * @return list of list of nodes.
      */
     public static <T> List<List<Node<T>>> getPathsFromRootToAnyLeaf(Tree<T> tree){

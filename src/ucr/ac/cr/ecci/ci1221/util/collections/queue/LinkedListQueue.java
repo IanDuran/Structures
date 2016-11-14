@@ -119,7 +119,7 @@ public class LinkedListQueue<E> implements Queue<E> {
     /**
      * Node class for the queue.
      * This class contains the objects that will be sotred in the queue.
-     * @param <T>
+     * @param <T> class stored in the queue
      * @author Ian Duran
      */
     private class Node<T>{

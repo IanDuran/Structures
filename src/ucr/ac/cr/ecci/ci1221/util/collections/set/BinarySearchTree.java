@@ -183,8 +183,8 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
 
     /**
      * Removes a node from the BST iteratively.
-     * First it moves until the current node is the one with the value that is going to
-     * be removed. The it considers several cases. The first is that the node is a leaf,
+     * It moves until the current node is the one with the value that is going to
+     * be removed. Then it considers several cases. The first is that the node is a leaf,
      * in which case it is removed easily. The second is that the node has only one son,
      * in that case the node is replaced with it's child. And the last is that the node
      * has two children. In that case, it creates a Node to be deleted, that node is set
@@ -205,61 +205,61 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
                         currentNode = currentNode.getRightSon();
 
                 }
-                if(currentNode.getRightSon() == null && currentNode.getLeftSon() == null){
-                    // Node is a leaf
-                    if(currentNode == root)
-                        root = null;
-
-                    else if(currentNode.getParent().getRightSon().getValue().compareTo(currentNode.getValue()) == 0)
-                        currentNode.getParent().setRightSon(null);
-
-                    else
-                        currentNode.getParent().setLeftSon(null);
-
-                }else if(currentNode.getRightSon() != null && currentNode.getLeftSon() == null){
-                    //Node only has right son
-                    if(currentNode == root){
-                        root = root.getRightSon();
-                        root.setParent(null);
-                    }else if(currentNode.getParent().getLeftSon() == currentNode)
-                        //Node is left child of parent
-                        currentNode.getParent().setLeftSon(currentNode.getRightSon());
-
-                    else
-                        //Node is right child of parent
-                        currentNode.getParent().setRightSon(currentNode.getRightSon());
-
-                }else if(currentNode.getLeftSon() != null && currentNode.getRightSon() == null){
-                    //Node only has left son
-                    if(currentNode == root){
-                        root = root.getLeftSon();
-                        root.setParent(null);
-                    }else if(currentNode.getParent().getLeftSon() == currentNode)
-                        //Node is left child of parent
-                        currentNode.getParent().setLeftSon(currentNode.getLeftSon());
-
-                    else
-                        //Node is right child of parent
-                        currentNode.getParent().setRightSon(currentNode.getLeftSon());
-
-                }else{
-                    //Node has two children
-                    TreeNode<T> toDelete = currentNode.getLeftSon();
-                    while(toDelete.getRightSon() != null)
-                        toDelete = toDelete.getRightSon();
-
-                    this.swap(currentNode, toDelete);
-                    if(toDelete.getParent().getLeftSon() == toDelete)
-                        //Node to delete is left child of parent
-                        toDelete.getParent().setLeftSon(null);
-
-                    else
-                        //Node to delete is right child of parent
-                        toDelete.getParent().setRightSon(null);
-
-                }
+                this.remove(currentNode);
                 storedObjects--;
             }
+        }
+    }
+
+    /**
+     * Removes a node from the Tree.
+     * It considers several cases. The first is that the node is a leaf,
+     * in which case it is removed easily. The second is that the node has only one son,
+     * in that case the node is replaced with it's child. And the last is that the node
+     * has two children. In that case, it creates a Node to be deleted, that node is set
+     * to be the rightmost of the left son of the node. Then the values in the nodes are
+     * swapped and calls itself recursively to delete the node.
+     * @param node node that is going to be deleted.
+     */
+    private void remove(TreeNode<T> node){
+        if(node.getRightSon() == null && node.getLeftSon() == null){
+            // Node is a leaf
+            if(node.getParent().getRightSon().getValue().compareTo(node.getValue()) == 0)
+                node.getParent().setRightSon(null);
+
+            else
+                node.getParent().setLeftSon(null);
+
+        }else if(node.getRightSon() != null && node.getLeftSon() == null){
+            //Node only has right son
+            if(node == root){
+                root = root.getRightSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node)//Node is left child of parent
+                node.getParent().setLeftSon(node.getRightSon());
+
+            else//Node is right child of parent
+                node.getParent().setRightSon(node.getRightSon());
+
+        }else if(node.getLeftSon() != null && node.getRightSon() == null){
+            //Node only has left son
+            if(node == root){
+                root = root.getLeftSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node)//Node is left child of parent
+                node.getParent().setLeftSon(node.getLeftSon());
+
+            else//Node is right child of parent
+                node.getParent().setRightSon(node.getLeftSon());
+
+        }else{
+            //Node has two children
+            TreeNode<T> toDelete = node.getLeftSon();
+            while(toDelete.getRightSon() != null)
+                toDelete = toDelete.getRightSon();
+
+            this.swap(node, toDelete);
+            this.remove(toDelete);
         }
     }
 
@@ -341,7 +341,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> implements Set<T>
 
     /**
      * Iterator for the Binary Search Tree class
-     * @param <E>
+     * @param <E> class that is being stored in the Tree
      */
     private class BinaryTreeIterator<E> implements Iterator<E>{
 

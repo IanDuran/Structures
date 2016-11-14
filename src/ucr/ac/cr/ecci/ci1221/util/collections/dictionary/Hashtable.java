@@ -31,7 +31,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
 
     /**
      * Returns the number of elements stored in the Hash Table
-     * @return
+     * @return the number of elements stored in the Haash Tabler
      */
     @Override
     public int size() {
@@ -67,7 +67,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
     /**
      * Returns whether a given object is an object stored in the Hash.
      * @param value value whose presence in this dictionary is to be tested
-     * @return
+     * @return previous value contained in the bucket
      */
     @Override
     public boolean containsValue(Object value) {
@@ -102,7 +102,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
      * It also stores the key in an array for the keys.
      * @param key key with which the specified value is to be associated
      * @param value value to be associated with the specified key
-     * @return
+     * @return the value inserted in the Hash Table
      */
     @Override
     public V put(K key, V value) {

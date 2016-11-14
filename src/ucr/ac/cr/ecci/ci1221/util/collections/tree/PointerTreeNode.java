@@ -13,7 +13,7 @@ public class PointerTreeNode<T> implements Node<T> {
 
     /**
      * Creates a new instance of a PointerTreeNode with the label passed as parameter
-     * @param label
+     * @param label value stored in the Node
      */
     public PointerTreeNode(T label){
         this.label = label;

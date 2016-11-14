@@ -239,7 +239,7 @@ public class LinkedListSet<T> implements Set<T> {
 
     /**
      * Iterator class for the LinkedListSet.
-     * @param <E>
+     * @param <E> class being stored in the Set
      */
     private class LinkedSetIterator<E> implements Iterator<E> {
         private Node<E> currentNode = null;

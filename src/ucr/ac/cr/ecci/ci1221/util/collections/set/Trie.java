@@ -254,7 +254,7 @@ public class Trie implements Set<String> {
          * Constructor for the TrieIterator class.
          * It takes an array of TrieCharacters and puts it's word into a
          * Queue of strings. To do this it calls a private recursive method.
-         * @param values
+         * @param values first array of TrieCharacter inside the Trie
          */
         public TrieIterator(TrieCharacter[] values){
             words = new LinkedListQueue<>();

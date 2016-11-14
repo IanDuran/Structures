@@ -1,5 +1,6 @@
 package ucr.ac.cr.ecci.ci1221.tests;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.BinarySearchTree;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.LinkedListSet;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
@@ -60,12 +61,12 @@ public class SetTests {
     public void binarySearchTreeTests(){
         System.out.println("BinarySearchTree");
         Set<Integer> bst = new BinarySearchTree<>();
-        Random r = new Random();
+        /*Random r = new Random();
         while(bst.size() < 10)
             bst.put(r.nextInt(20));
-        System.out.println("Values of the first set:");
+        //System.out.println("Values of the first set:");
         Iterator<Integer> i = bst.iterator();
-        while(i.hasNext())
+        /*while(i.hasNext())
             System.out.println(i.next());
         System.out.println();
         Set<Integer> bst2 = new BinarySearchTree<>();
@@ -97,7 +98,30 @@ public class SetTests {
         i = difference.iterator();
         while(i.hasNext())
             System.out.println(i.next());
+        System.out.println();*/
+        bst.put(55);
+        bst.put(81);
+        bst.put(73);
+        bst.put(30);
+        bst.put(32);
+        bst.put(52);
+        bst.put(51);
+        bst.put(24);
+        bst.put(5);
+        bst.put(20);
+        Iterator<Integer> i = bst.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
         System.out.println();
+
+        bst.remove(55);
+        i = bst.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
+        //System.out.println(bst.isMember(30));
+        i = bst.iterator();
+        while(i.hasNext())
+            System.out.println(bst.isMember(i.next()));
     }
 
     public void trieTests(){
@@ -114,7 +138,7 @@ public class SetTests {
     public static void main(String... args){
         SetTests st = new SetTests();
         //st.linkedListSetTests();
-        //st.binarySearchTreeTests();
-        st.trieTests();
+        st.binarySearchTreeTests();
+        //st.trieTests();
     }
 }

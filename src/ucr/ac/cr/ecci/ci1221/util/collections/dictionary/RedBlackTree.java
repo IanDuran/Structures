@@ -112,7 +112,7 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
                 if (node.getLeftSon() != null)
                     toReturn = this.get(node.getLeftSon(), key);
 
-            }else
+            }else if(node.getKey().compareTo(key) == 0)
                 toReturn = node.getValue();
 
         }
@@ -124,20 +124,22 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
      * the inserted Node.
      * @param key key with which the specified value is to be associated
      * @param value value to be associated with the specified key
-     * @return
+     * @return the value stored in the Tree
      */
     @Override
     public V put(K key, V value) {
         TreeNode<K, V> newNode = new TreeNode<>(key, value);
-        newNode.setRed(true);
-        if(root == null){
-            root = newNode;
-            repaint(root);
-        }else
-            put(root, newNode);
+        if(!this.containsKey(key)){
+            newNode.setRed(true);
+            if(root == null){
+                root = newNode;
+                repaint(root);
+            }else
+                put(root, newNode);
 
-        storedObjects++;
-        this.evaluate(newNode);
+            storedObjects++;
+            this.evaluate(newNode);
+        }
         return newNode.getValue();
     }
 
@@ -163,16 +165,118 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
 
         }
     }
-
+///////////////////////////////////////////////////////////////////
     @Override
     public V remove(K key) {
         V toReturn = null;
-        if(this.get(key) != null){
+        if(this.containsKey(key)){
+            TreeNode<K, V> currentNode = root;
+            while(currentNode.getKey().compareTo(key) != 0){
+                if(currentNode.getKey().compareTo(key) > 0)
+                    currentNode = currentNode.getLeftSon();
 
+                else
+                    currentNode = currentNode.getRightSon();
+
+            }
+            this.bstRemove(currentNode);
         }
         return toReturn;
     }
 
+    private void bstRemove(TreeNode<K, V> node){
+        if(node.getRightSon() == null && node.getLeftSon() == null){
+            // Node is a leaf
+            if(node.getParent().getRightSon().getKey().compareTo(node.getKey()) == 0)
+                node.getParent().setRightSon(null);
+
+            else
+                node.getParent().setLeftSon(null);
+
+        }else if(node.getRightSon() != null && node.getLeftSon() == null){
+            //Node only has right son
+            if(node.getParent().isRed()){
+                node.getRightSon().setRed(false);
+            }
+            if(node == root){
+                root = root.getRightSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node) {//Node is left child of parent
+                node.getParent().setLeftSon(node.getRightSon());
+            }
+            else {//Node is right child of parent
+                node.getParent().setRightSon(node.getRightSon());
+            }
+        }else if(node.getLeftSon() != null && node.getRightSon() == null){
+            //Node only has left son
+            if(node.getParent().isRed()){
+                node.getLeftSon().setRed(false);
+            }
+            if(node == root){
+                root = root.getLeftSon();
+                root.setParent(null);
+            }else if(node.getParent().getLeftSon() == node) {//Node is left child of parent
+                node.getParent().setLeftSon(node.getLeftSon());
+            }
+            else {//Node is right child of parent
+                node.getParent().setRightSon(node.getLeftSon());
+            }
+        }else{
+            //Node has two children
+            TreeNode<K, V> toDelete = node.getLeftSon();
+            while(toDelete.getRightSon() != null)
+                toDelete = toDelete.getRightSon();
+
+            this.swap(node, toDelete);
+            this.bstRemove(toDelete);
+        }
+    }
+
+    private void swap(TreeNode<K, V> x, TreeNode<K, V> y){
+        K tempK = x.getKey();
+        V tempV = x.getValue();
+        x.setValue(y.getValue());
+        x.setKey(y.getKey());
+        y.setValue(tempV);
+        y.setKey(tempK);
+    }
+
+    private void removalEvaluation(TreeNode<K, V> toDelete, TreeNode<K, V> replacingChild){
+        if(toDelete.isRed() || replacingChild.isRed()){
+            //One of the nodes is red
+            replacingChild.setRed(false);
+        }else if(!toDelete.isRed() && (!replacingChild.isRed() || replacingChild == null)){
+            replacingChild.setDoubleBlack(true);
+            while(replacingChild.isDoubleBlack() && replacingChild != root){
+                if(replacingChild.getParent().getRightSon() == replacingChild){
+                    //Replacing child is in the right side of the parent, sibling in the left
+                    if(replacingChild.getParent().getLeftSon() != null && replacingChild.getParent().getLeftSon().isRed()){
+                        //Sibling is red
+                        this.simpleRightRotation(replacingChild.getParent());
+                        this.switchColors(replacingChild.getParent(), replacingChild.getParent().getParent());
+                    }else{
+                        //Sibling is either null or black
+                    }
+                }else{
+                    //Replacing child is in the left side of the parent, sibling in the right
+                    if(replacingChild.getParent().getRightSon() != null && replacingChild.getParent().getRightSon().isRed()){
+                        //Sibling is red
+                        this.simpleLeftRotation(replacingChild.getParent());
+                        this.switchColors(replacingChild.getParent(), replacingChild.getParent().getParent());
+                    }else{
+                        //Sibling is either null of black
+                    }
+                }
+            }
+        }
+    }
+
+    private void switchColors(TreeNode<K, V> x, TreeNode<K, V> y){
+        boolean color = x.isRed();
+        x.setRed(y.isRed());
+        y.setRed(color);
+    }
+//////////////////////////////////////////
     /**
      * Clears the Red-Black Tree of all it's contents
      */
@@ -402,10 +506,12 @@ public class RedBlackTree<K extends Comparable<? super K>, V> implements Diction
         this.simpleRightRotation(node.getParent());
     }
 
+
+
     /**
      * Private class that conforms the Nodes of the Red-Black Tree.
-     * @param <K>
-     * @param <V>
+     * @param <K> class of the key
+     * @param <V> class of the value
      */
     private class TreeNode<K, V>{
         private K key = null;
