@@ -50,7 +50,10 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public int first(){
-        return 0;
+        int firstIndex = 0;
+        if(this.isEmpty())
+            firstIndex = -1;
+        return firstIndex;
     }
 
     /**
