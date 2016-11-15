@@ -61,12 +61,12 @@ public class SetTests {
     public void binarySearchTreeTests(){
         System.out.println("BinarySearchTree");
         Set<Integer> bst = new BinarySearchTree<>();
-        /*Random r = new Random();
+        Random r = new Random();
         while(bst.size() < 10)
             bst.put(r.nextInt(20));
-        //System.out.println("Values of the first set:");
+        System.out.println("Values of the first set:");
         Iterator<Integer> i = bst.iterator();
-        /*while(i.hasNext())
+        while(i.hasNext())
             System.out.println(i.next());
         System.out.println();
         Set<Integer> bst2 = new BinarySearchTree<>();
@@ -98,47 +98,63 @@ public class SetTests {
         i = difference.iterator();
         while(i.hasNext())
             System.out.println(i.next());
-        System.out.println();*/
-        bst.put(55);
-        bst.put(81);
-        bst.put(73);
-        bst.put(30);
-        bst.put(32);
-        bst.put(52);
-        bst.put(51);
-        bst.put(24);
-        bst.put(5);
-        bst.put(20);
-        Iterator<Integer> i = bst.iterator();
-        while(i.hasNext())
-            System.out.println(i.next());
         System.out.println();
-
-        bst.remove(55);
-        i = bst.iterator();
-        while(i.hasNext())
-            System.out.println(i.next());
-        //System.out.println(bst.isMember(30));
-        i = bst.iterator();
-        while(i.hasNext())
-            System.out.println(bst.isMember(i.next()));
     }
 
     public void trieTests(){
         Set<String> t = new Trie();
+        t.put("God Emperor Trump");
+        t.put("USA");
         t.put("Broh");
         t.put("Bruh");
         t.put("Brah");
-        t.remove("Bruh");
+        System.out.println("Strings in the first Trie:");
         Iterator<String> i = t.iterator();
         while(i.hasNext())
             System.out.println(i.next());
+
+        System.out.println();
+        System.out.println("Size should be 5: " + t.size());
+        System.out.println();
+        Set<String> t2 = new Trie();
+        t2.put("Wall");
+        t2.put("Snow Mexicans");
+        t2.put("USA");
+        t2.put("My name is Borat");
+        t2.put("Broh");
+        t2.put("Food Library");
+        System.out.println("Strings in the second Trie");
+        i = t2.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
+
+        System.out.println();
+        Set<String> union = t.union(t2);
+        System.out.println("Union");
+        i = union.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
+
+        System.out.println();
+        Set<String> intersection = t.intersection(t2);
+        System.out.println("Intersection");
+        i = intersection.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
+
+        System.out.println();
+        Set<String> difference = t.difference(t2);
+        System.out.println("Difference");
+        i = difference.iterator();
+        while(i.hasNext())
+            System.out.println(i.next());
+        System.out.println();
     }
 
     public static void main(String... args){
         SetTests st = new SetTests();
-        //st.linkedListSetTests();
+        st.linkedListSetTests();
         st.binarySearchTreeTests();
-        //st.trieTests();
+        st.trieTests();
     }
 }
