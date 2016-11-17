@@ -1,6 +1,5 @@
 package ucr.ac.cr.ecci.ci1221.tests;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.BinarySearchTree;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.LinkedListSet;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
