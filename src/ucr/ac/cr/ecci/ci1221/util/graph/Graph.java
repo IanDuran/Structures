@@ -1,6 +1,6 @@
 package ucr.ac.cr.ecci.ci1221.util.graph;
 
-import java.util.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.Collection;
 

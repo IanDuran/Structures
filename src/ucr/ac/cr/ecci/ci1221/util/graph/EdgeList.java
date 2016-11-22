@@ -3,7 +3,7 @@ package ucr.ac.cr.ecci.ci1221.util.graph;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 
 import java.util.Iterator;
-import java.util.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 
 /**
  * @author Student Name
@@ -11,10 +11,18 @@ import java.util.List;
 public class EdgeList<V> implements Graph<V> {
 
     private LinkedList<Edge> edges;
+    private boolean directed;
+    private int counter;
+
+    public EdgeList(boolean directed){
+        edges = new LinkedList<>();
+        this.directed = directed;
+        counter = 0;
+    }
 
     @Override
     public boolean isDirected() {
-        return false;
+        return directed;
     }
 
     @Override
@@ -107,30 +115,35 @@ public class EdgeList<V> implements Graph<V> {
 
     }
 
-    private class Edge{
-        private V first;
-        private V second;
+    private class Edge<T>{
+        private T first;
+        private T second;
+        private int firstNumber;
+        private int secondNumber;
         private int weight;
 
-        public Edge(V first, V second, int weight){
+        public Edge(T first, T second){
             this.first = first;
             this.second = second;
-            this.weight = weight;
         }
 
-        public V getFirst() {
+        public Edge(T first){
+            this.first = first;
+        }
+
+        public T getFirst() {
             return first;
         }
 
-        public void setFirst(V first) {
+        public void setFirst(T first) {
             this.first = first;
         }
 
-        public V getSecond() {
+        public T getSecond() {
             return second;
         }
 
-        public void setSecond(V second) {
+        public void setSecond(T second) {
             this.second = second;
         }
 
@@ -140,6 +153,22 @@ public class EdgeList<V> implements Graph<V> {
 
         public void setWeight(int weight) {
             this.weight = weight;
+        }
+
+        public int getFirstNumber() {
+            return firstNumber;
+        }
+
+        public void setFirstNumber(int firstNumber) {
+            this.firstNumber = firstNumber;
+        }
+
+        public int getSecondNumber() {
+            return secondNumber;
+        }
+
+        public void setSecondNumber(int secondNumber) {
+            this.secondNumber = secondNumber;
         }
     }
 }

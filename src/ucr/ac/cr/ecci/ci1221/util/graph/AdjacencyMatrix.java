@@ -1,22 +1,33 @@
 package ucr.ac.cr.ecci.ci1221.util.graph;
 
 import java.util.Iterator;
-import java.util.List;
+
+import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
+import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 
 /**
  * @author Student Name
  */
 public class AdjacencyMatrix<V> implements Graph<V>{
 
+    private final int INITIAL_SIZE = 10;
     private int[][] matrix;
+    private V[] values;
+    private boolean directed;
+    private int vertexes;
+    private int edges;
 
-    public AdjacencyMatrix(){
-
+    public AdjacencyMatrix(boolean directed){
+        this.directed = directed;
+        matrix = new int[INITIAL_SIZE][INITIAL_SIZE];
+        values = (V[]) new Object[INITIAL_SIZE];
+        vertexes = 0;
+        edges = 0;
     }
 
     @Override
     public boolean isDirected() {
-        return false;
+        return directed;
     }
 
     @Override
@@ -71,17 +82,21 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public List<V> getValues() {
-        return null;
+        List<V> valueList = new LinkedList<>();
+        for(int i = 0; i < vertexes; i++)
+            valueList.add(values[i]);
+
+        return valueList;
     }
 
     @Override
     public int V() {
-        return 0;
+        return vertexes;
     }
 
     @Override
     public int E() {
-        return 0;
+        return edges;
     }
 
     @Override
@@ -91,23 +106,45 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public double getWeight() {
-        return 0;
+        double weight = 0;
+        for (int i = 0; i < vertexes; i++) {
+            for (int j = 0; j < vertexes; j++) {
+                weight += matrix[i][j];
+            }
+        }
+        if(this.isDirected())
+            weight /= 2;
+
+        return weight;
     }
 
     @Override
     public int size() {
-        return 0;
+        return vertexes;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return vertexes == 0;
     }
 
     @Override
     public void clear() {
-
+        matrix = new int[INITIAL_SIZE][INITIAL_SIZE];
+        values = (V[]) new Object[INITIAL_SIZE];
+        vertexes = 0;
+        edges = 0;
     }
 
+    private int getIndex(V value){
+        int index = -1;
+        int counter = 0;
+        while(index == -1 && counter < vertexes){
+            if(values[counter].equals(value))
+                index = counter;
 
+            counter++;
+        }
+        return index;
+    }
 }
