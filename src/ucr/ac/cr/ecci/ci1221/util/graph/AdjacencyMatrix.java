@@ -6,7 +6,7 @@ import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 
 /**
- * @author Student Name
+ * @author Ian Duran
  */
 public class AdjacencyMatrix<V> implements Graph<V>{
 
@@ -104,10 +104,6 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public void removeValue(V value) {
-        if(this.contains(value)) {
-            this.moveDown(this.getIndex(value));
-            vertexes--;
-        }
     }
 
     @Override
