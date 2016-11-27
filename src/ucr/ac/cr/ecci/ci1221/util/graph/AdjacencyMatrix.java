@@ -154,7 +154,7 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public Iterator<V> iterator() {
-        return null;
+        return new AdjacencyMatrixIterator(values, vertexes);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class AdjacencyMatrix<V> implements Graph<V>{
                 weight += matrix[i][j];
             }
         }
-        if(this.isDirected())
+        if(!this.isDirected())
             weight /= 2;
 
         return weight;
@@ -220,6 +220,30 @@ public class AdjacencyMatrix<V> implements Graph<V>{
         for(int i = index; i < vertexes - 1; i++){
             values[i] = values[i + 1];
             matrix[i] = matrix[i + 1];
+        }
+    }
+
+    private class AdjacencyMatrixIterator implements Iterator<V>{
+        private int index;
+        private int maxIndex;
+        private V[] values;
+
+        public AdjacencyMatrixIterator(V[] values, int maxIndex){
+            this.values = values;
+            this.maxIndex = maxIndex;
+            index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < maxIndex;
+        }
+
+        @Override
+        public V next() {
+            V next = values[index];
+            index++;
+            return next;
         }
     }
 }

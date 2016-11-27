@@ -188,7 +188,7 @@ public class AdjacencyList<V> implements Graph<V> {
 
     @Override
     public Iterator<V> iterator() {
-        return new AdjacencyListIterator();
+        return new AdjacencyListIterator(values, vertexes);
     }
 
     @Override
@@ -286,14 +286,26 @@ public class AdjacencyList<V> implements Graph<V> {
     }
 
     private class AdjacencyListIterator implements Iterator<V>{
+        private int index;
+        private int maxIndex;
+        private V[] values;
+
+        public AdjacencyListIterator(V[] values, int maxIndex){
+            this.values = values;
+            this.maxIndex = maxIndex;
+            this.index = 0;
+        }
+
         @Override
         public boolean hasNext() {
-            return false;
+            return index < maxIndex;
         }
 
         @Override
         public V next() {
-            return null;
+            V next = values[index];
+            index++;
+            return next;
         }
     }
 }

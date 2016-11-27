@@ -14,6 +14,12 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Prim's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreePrim(Graph<V> graph){
+        boolean[] visited = new boolean[graph.size()];
+        return null;
+    }
+
+    private static <V> Graph<V> prim(){
+
         return null;
     }
 
@@ -21,6 +27,10 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Kruskal's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreeKruskal(Graph<V> graph){
+        return null;
+    }
+
+    private static <V> Graph<V> kruskal(){
         return null;
     }
 

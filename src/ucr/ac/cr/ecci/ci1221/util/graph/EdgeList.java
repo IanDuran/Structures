@@ -165,12 +165,15 @@ public class EdgeList<V> implements Graph<V> {
 
     @Override
     public int E() {
-        return edges.size();
+        int edgeNumber = edges.size();
+        if(!this.isDirected())
+            edgeNumber /= 2;
+        return edgeNumber;
     }
 
     @Override
     public Iterator<V> iterator() {
-        return null;
+        return new EdgeListIterator(values, vertexes);
     }
 
     @Override
@@ -208,6 +211,8 @@ public class EdgeList<V> implements Graph<V> {
         while(index == -1 && counter < vertexes){
             if(values[counter].equals(value))
                 index = counter;
+
+            counter++;
         }
         return index;
     }
@@ -228,6 +233,7 @@ public class EdgeList<V> implements Graph<V> {
         public Edge(int from, int to, double weight){
             this.from = from;
             this.to = to;
+            this.weight = weight;
         }
 
         public double getWeight() {
@@ -252,6 +258,29 @@ public class EdgeList<V> implements Graph<V> {
 
         public void setTo(int to) {
             this.to = to;
+        }
+    }
+
+    private class EdgeListIterator implements Iterator<V>{
+        private int index;
+        private int maxIndex;
+        private V[] values;
+
+        public EdgeListIterator(V[] values, int maxIndex){
+            this.values = values;
+            this.maxIndex = maxIndex;
+            index = 0;
+        }
+        @Override
+        public boolean hasNext() {
+            return index < maxIndex;
+        }
+
+        @Override
+        public V next() {
+            V next = values[index];
+            index++;
+            return next;
         }
     }
 }
