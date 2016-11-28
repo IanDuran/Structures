@@ -3,6 +3,7 @@ package ucr.ac.cr.ecci.ci1221.util.algorithm;
 import java.util.Dictionary;
 import java.util.Iterator;
 
+import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyList;
 import ucr.ac.cr.ecci.ci1221.util.graph.Graph;
@@ -29,7 +30,7 @@ public class GraphAlgorithms {
                 for(int j = 0; j < adjacentNodes.size(); j++){
                     if(!minimumTree.contains(adjacentNodes.get(j))){
                         double currentWeight = graph.getWeight(minimumValues.get(i), adjacentNodes.get(j));
-                        if(currentWeight < minimumEdge){
+                        if(currentWeight > 0 && currentWeight < minimumEdge){
                             index = i;
                             minimumEdge = currentWeight;
                             minimumEdgeValue =  adjacentNodes.get(j);
@@ -37,8 +38,17 @@ public class GraphAlgorithms {
                     }
                 }
             }
-            minimumTree.addNode(minimumEdgeValue);
-            minimumTree.addEdge(minimumValues.get(index), minimumEdgeValue, minimumEdge);
+            if(minimumEdge < Double.MAX_VALUE && minimumEdgeValue != null){
+                minimumTree.addNode(minimumEdgeValue);
+                minimumTree.addEdge(minimumValues.get(index), minimumEdgeValue, minimumEdge);
+            }else{
+                //Graph has more than one component
+                V toAdd = it.next();
+                while(graph.contains(toAdd) && it.hasNext())
+                    toAdd = it.next();
+
+                minimumTree.addNode(toAdd);
+            }
         }
         return minimumTree;
     }
@@ -47,7 +57,16 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Kruskal's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreeKruskal(Graph<V> graph){
-        return null;
+        Graph<V> minimumTree = new AdjacencyList<>(false);
+        List<Graph<V>> forest = new LinkedList<>();
+        Iterator<V> iterator = graph.iterator();
+        int counter = 0;
+        while(iterator.hasNext()){
+            forest.add(new AdjacencyList<V>(false));
+            forest.get(counter).addNode(iterator.next());
+            counter++;
+        }
+        return minimumTree;
     }
 
     private static <V> Graph<V> kruskal(){
@@ -57,7 +76,7 @@ public class GraphAlgorithms {
     /**
      * Returns whether the graph has cycles or not.
      *
-     * @return false if the flag has cycles, false otherwise.
+     * @return false if the flag has cycles, true otherwise.
      */
     public static <V> boolean isGraphAcyclic(Graph<V> graph){
         return false;

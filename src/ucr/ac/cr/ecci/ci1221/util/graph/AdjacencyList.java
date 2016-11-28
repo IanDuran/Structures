@@ -92,7 +92,7 @@ public class AdjacencyList<V> implements Graph<V> {
         double weight = -1;
         int firstIndex = this.getIndex(value1);
         int secondIndex = this.getIndex(value2);
-        if(firstIndex != -1){
+        if(firstIndex != -1 && secondIndex != -1){
             int counter = 0;
             while(weight == -1 && counter < adjacencies[firstIndex].size()){
                 if(adjacencies[firstIndex].get(counter).getValue() == secondIndex)
@@ -249,6 +249,7 @@ public class AdjacencyList<V> implements Graph<V> {
         while(counter < vertexes && index == -1){
             if(values[counter].equals(value))
                 index = counter;
+
             counter++;
         }
         return index;

@@ -18,8 +18,8 @@ public class GraphAlgorithmsTests {
         el.addNode('d');
         el.addNode('e');
         el.addEdge('a', 'b', 0.1);
-        el.addEdge('a', 'd', 3);
-        el.addEdge('c', 'b', 6);
+        //el.addEdge('a', 'd', 3);
+        //el.addEdge('c', 'b', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
         Graph<Character> g = GraphAlgorithms.getMinimumSpanningTreePrim(el);
