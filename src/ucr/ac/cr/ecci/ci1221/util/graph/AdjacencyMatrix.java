@@ -33,18 +33,22 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public void addNode(V value) {
-        if(vertexes == values.length)
-            this.enlarge();
+        if (!this.contains(value)) {
+            if(vertexes == values.length)
+                this.enlarge();
 
-        values[vertexes] = value;
-        vertexes++;
+            values[vertexes] = value;
+            vertexes++;
+        }
     }
 
     @Override
     public void addNodes(V value1, V value2) {
-        this.addNode(value1);
-        this.addNode(value2);
-        this.addEdge(value1, value2);
+        if(!this.contains(value1) && !this.contains(value2)){
+            this.addNode(value1);
+            this.addNode(value2);
+            this.addEdge(value1, value2);
+        }
     }
 
     @Override

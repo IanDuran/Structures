@@ -58,19 +58,32 @@ public class GraphAlgorithms {
      */
     public static <V> Graph<V> getMinimumSpanningTreeKruskal(Graph<V> graph){
         Graph<V> minimumTree = new AdjacencyList<>(false);
-        List<Graph<V>> forest = new LinkedList<>();
-        Iterator<V> iterator = graph.iterator();
-        int counter = 0;
-        while(iterator.hasNext()){
-            forest.add(new AdjacencyList<V>(false));
-            forest.get(counter).addNode(iterator.next());
-            counter++;
+        List<V> values = graph.getValues();
+        List<Edges<V>> edges = new LinkedList<>();
+        for(int i = 0; i < values.size(); i++){
+            for(int j = 0; j < values.size(); j++){
+                if(i != j){
+                    if(graph.areLinked(values.get(i), values.get(j))){
+                        edges.add(new Edges<V>(values.get(i), values.get(j), graph.getWeight(values.get(i), values.get(j))));
+                    }
+                }
+            }
+        }
+        SortingAlgorithms.mergeSort(edges);
+        while(!edges.isEmpty()){
+            Edges<V> e = edges.get(0);
+            edges.remove(0);
+            if(!minimumTree.contains(e.getFirstValue()) || !minimumTree.contains(e.getSecondValue())){
+                if (!minimumTree.contains(e.getFirstValue()))
+                    minimumTree.addNode(e.getFirstValue());
+
+                if (!minimumTree.contains(e.getSecondValue()))
+                    minimumTree.addNode(e.getSecondValue());
+
+                minimumTree.addEdge(e.getFirstValue(), e.getSecondValue(), e.getWeight());
+            }
         }
         return minimumTree;
-    }
-
-    private static <V> Graph<V> kruskal(){
-        return null;
     }
 
     /**
@@ -120,5 +133,46 @@ public class GraphAlgorithms {
 
     public static <V> List<Graph<V>> getConnectedComponents(Graph<V> graph){
         return null;
+    }
+
+    /**
+     * Private class that holds Node's values and the weight between them, used to simplify
+     * the implementation of the Kruskal algorithm.
+     * @param <V>
+     */
+    private static class Edges<V> implements Comparable<Edges<V>>{
+        private V firstValue;
+        private V secondValue;
+        private double weight;
+
+        public Edges(V firstValue, V secondValue, double weight){
+            this.firstValue = firstValue;
+            this.secondValue = secondValue;
+            this.weight = weight;
+        }
+
+        public V getFirstValue() {
+            return firstValue;
+        }
+
+        public V getSecondValue() {
+            return secondValue;
+        }
+
+        public double getWeight() {
+            return weight;
+        }
+
+        @Override
+        public int compareTo(Edges<V> o) {
+            int toReturn = 0;
+            if(this.weight < o.getWeight())
+                toReturn = -1;
+
+            else if(this.weight > o.getWeight())
+                toReturn = 1;
+
+            return toReturn;
+        }
     }
 }
