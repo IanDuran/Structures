@@ -1,5 +1,7 @@
 package ucr.ac.cr.ecci.ci1221.tests;
 
+import ucr.ac.cr.ecci.ci1221.util.algorithm.GraphAlgorithms;
+import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyList;
 import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyMatrix;
 import ucr.ac.cr.ecci.ci1221.util.graph.EdgeList;
@@ -9,7 +11,7 @@ import java.util.Iterator;
 
 public class GraphAlgorithmsTests {
     public static void main(String... args){
-        Graph<Character> el = new AdjacencyMatrix<>(false);
+        EdgeList<Character> el = new EdgeList<>(false);
         el.addNode('a');
         el.addNode('b');
         el.addNode('c');
@@ -20,9 +22,14 @@ public class GraphAlgorithmsTests {
         el.addEdge('c', 'b', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
-        //System.out.println(el.getWeight());
-        Iterator<Character> i = el.iterator();
-        while(i.hasNext())
-            System.out.println(i.next());
+        Graph<Character> g = GraphAlgorithms.getMinimumSpanningTreePrim(el);
+        Iterator<Character> i = g.iterator();
+        while(i.hasNext()){
+            Character t = i.next();
+            List<Character> l = g.getAdjacentNodes(t);
+            for(int j = 0; j < l.size(); j++){
+                System.out.println(t + " " + g.getWeight(t, l.get(j)) + " " + l.get(j));
+            }
+        }
     }
 }

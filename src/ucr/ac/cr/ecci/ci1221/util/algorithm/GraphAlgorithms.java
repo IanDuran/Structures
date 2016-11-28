@@ -1,8 +1,10 @@
 package ucr.ac.cr.ecci.ci1221.util.algorithm;
 
 import java.util.Dictionary;
+import java.util.Iterator;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
+import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyList;
 import ucr.ac.cr.ecci.ci1221.util.graph.Graph;
 
 /**
@@ -14,13 +16,31 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Prim's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreePrim(Graph<V> graph){
-        boolean[] visited = new boolean[graph.size()];
-        return null;
-    }
-
-    private static <V> Graph<V> prim(){
-
-        return null;
+        Graph<V> minimumTree = new AdjacencyList<>(false);
+        Iterator<V> it = graph.iterator();
+        minimumTree.addNode(it.next());
+        while(minimumTree.V() < graph.V()){
+            List<V> minimumValues = minimumTree.getValues();
+            double minimumEdge = Double.MAX_VALUE;
+            V minimumEdgeValue = null;
+            int index = 0;
+            for(int i = 0; i < minimumValues.size(); i++){
+                List<V> adjacentNodes = graph.getAdjacentNodes(minimumValues.get(i));
+                for(int j = 0; j < adjacentNodes.size(); j++){
+                    if(!minimumTree.contains(adjacentNodes.get(j))){
+                        double currentWeight = graph.getWeight(minimumValues.get(i), adjacentNodes.get(j));
+                        if(currentWeight < minimumEdge){
+                            index = i;
+                            minimumEdge = currentWeight;
+                            minimumEdgeValue =  adjacentNodes.get(j);
+                        }
+                    }
+                }
+            }
+            minimumTree.addNode(minimumEdgeValue);
+            minimumTree.addEdge(minimumValues.get(index), minimumEdgeValue, minimumEdge);
+        }
+        return minimumTree;
     }
 
     /**
