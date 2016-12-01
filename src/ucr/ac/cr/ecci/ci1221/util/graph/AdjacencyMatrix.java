@@ -24,6 +24,11 @@ public class AdjacencyMatrix<V> implements Graph<V>{
         values = (V[]) new Object[INITIAL_SIZE];
         vertexes = 0;
         edges = 0;
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[i].length; j++){
+                matrix[i][j] = -1;
+            }
+        }
     }
 
     @Override
@@ -97,7 +102,7 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public double getWeight(V value1, V value2) {
-        double weight = 0;
+        double weight = -1;
         if(this.contains(value1) && this.contains(value2)){
             int firstIndex = this.getIndex(value1);
             int secondIndex = this.getIndex(value2);

@@ -96,7 +96,7 @@ public class EdgeList<V> implements Graph<V> {
 
     @Override
     public double getWeight(V value1, V value2) {
-        double weight = 0;
+        double weight = -1;
         if(this.contains(value1) && this.contains(value2) && this.areLinked(value1, value2)){
             int firstIndex = this.getIndex(value1);
             int secondIndex = this.getIndex(value2);

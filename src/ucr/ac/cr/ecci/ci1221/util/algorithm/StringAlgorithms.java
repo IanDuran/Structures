@@ -28,12 +28,10 @@ public class StringAlgorithms {
     }
 
     public static int knuthMorrisPrattStringMatcher(String text, String pattern){
-
         return 0;
     }
 
     public static int boyerMooreStringMatcher(String text, String pattern){
-
         return 0;
     }
 }

@@ -128,7 +128,33 @@ public class GraphAlgorithms {
      * @param <V> the type of elements contained in the graph.
      */
     public static <V> void printAllShortestPaths(Graph<V> graph){
+        List<V> values = graph.getValues();
+        int size = graph.V();
+        double matrix[][] = new double[size][size];
 
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                if(i != j)
+                    matrix[i][j] = graph.getWeight(values.get(i), values.get(j));
+            }
+        }
+
+        for(int k = 0; k < size; k++){
+            for(int i = 0; i < size; i++){
+                for(int j = 0; j < size; j++){
+                    if(matrix[i][j] == -1 && (matrix[i][k] != -1 && matrix[k][j] != -1) || (matrix[i][k] != -1 && matrix[k][j] != -1 && matrix[i][j] > matrix[i][k] + matrix[k][j])){
+                        matrix[i][j] = matrix[i][k] + matrix[k][j];
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public static <V> List<Graph<V>> getConnectedComponents(Graph<V> graph){

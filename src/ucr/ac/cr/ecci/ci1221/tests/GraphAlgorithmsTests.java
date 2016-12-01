@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class GraphAlgorithmsTests {
     public static void main(String... args){
-        EdgeList<Character> el = new EdgeList<>(false);
+        Graph<Character> el = new AdjacencyList<>(false);
         el.addNode('a');
         el.addNode('b');
         el.addNode('c');
@@ -22,14 +22,6 @@ public class GraphAlgorithmsTests {
         el.addEdge('c', 'b', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
-        Graph<Character> g = GraphAlgorithms.getMinimumSpanningTreeKruskal(el);
-        Iterator<Character> i = g.iterator();
-        while(i.hasNext()){
-            Character t = i.next();
-            List<Character> l = g.getAdjacentNodes(t);
-            for(int j = 0; j < l.size(); j++){
-                System.out.println(t + " " + g.getWeight(t, l.get(j)) + " " + l.get(j));
-            }
-        }
+        GraphAlgorithms.printAllShortestPaths(el);
     }
 }
