@@ -5,6 +5,8 @@ import java.util.Iterator;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.set.LinkedListSet;
+import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyList;
 import ucr.ac.cr.ecci.ci1221.util.graph.Graph;
 
@@ -17,6 +19,9 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Prim's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreePrim(Graph<V> graph){
+        if(graph.isDirected())
+            throw new IllegalArgumentException();
+
         Graph<V> minimumTree = new AdjacencyList<>(false);
         Iterator<V> it = graph.iterator();
         minimumTree.addNode(it.next());
@@ -57,6 +62,9 @@ public class GraphAlgorithms {
      * Returns the minimum spanning tree of the given graph calculated using Kruskal's algorithm.
      */
     public static <V> Graph<V> getMinimumSpanningTreeKruskal(Graph<V> graph){
+        if(graph.isDirected())
+            throw new IllegalArgumentException();
+
         Graph<V> minimumTree = new AdjacencyList<>(false);
         List<V> values = graph.getValues();
         List<Edges<V>> edges = new LinkedList<>();
@@ -91,8 +99,32 @@ public class GraphAlgorithms {
      *
      * @return false if the flag has cycles, true otherwise.
      */
-    public static <V> boolean isGraphAcyclic(Graph<V> graph){
-        return false;
+    public static <V> boolean isGraphAcyclic(Graph<V> graph) {
+        if(!graph.isDirected())
+            throw new IllegalArgumentException();
+
+        boolean hasCycles = false;
+        if(!graph.isEmpty()){
+            Iterator<V> i = graph.iterator();
+            Set<V> visited = new LinkedListSet<>();
+            hasCycles = dfs(i.next(), graph, visited);
+        }
+        return !hasCycles;
+    }
+
+    public static <V> boolean dfs(V node, Graph<V> graph, Set<V> visited){
+        boolean hasCycle = false;
+        visited.put(node);
+        List<V> adjacentNodes = graph.getAdjacentNodes(node);
+        for (int i = 0; i < adjacentNodes.size(); i++) {
+            if (!visited.isMember(adjacentNodes.get(i)))
+                hasCycle = dfs(adjacentNodes.get(i), graph, visited);
+
+            else
+                hasCycle = true;
+
+        }
+        return hasCycle;
     }
 
     /**
@@ -148,10 +180,14 @@ public class GraphAlgorithms {
                 }
             }
         }
-
+        for(int i = 0; i < size; i++){
+            System.out.print("  " + values.get(i) + "  ");
+        }
+        System.out.println();
         for(int i = 0; i < size; i++) {
+            System.out.print(values.get(i)+ " ");
             for (int j = 0; j < size; j++) {
-                System.out.print(matrix[i][j] + " ");
+                System.out.print(matrix[i][j] + "  ");
             }
             System.out.println();
         }

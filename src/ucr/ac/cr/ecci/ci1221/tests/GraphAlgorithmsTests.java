@@ -11,17 +11,17 @@ import java.util.Iterator;
 
 public class GraphAlgorithmsTests {
     public static void main(String... args){
-        Graph<Character> el = new AdjacencyList<>(false);
+        Graph<Character> el = new AdjacencyList<>(true);
         el.addNode('a');
         el.addNode('b');
         el.addNode('c');
         el.addNode('d');
         el.addNode('e');
         el.addEdge('a', 'b', 0.1);
-        el.addEdge('a', 'd', 3);
-        el.addEdge('c', 'b', 6);
+        el.addEdge('d', 'a', 3);
+        el.addEdge('b', 'c', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
-        GraphAlgorithms.printAllShortestPaths(el);
+        System.out.println(GraphAlgorithms.isGraphAcyclic(el));
     }
 }
