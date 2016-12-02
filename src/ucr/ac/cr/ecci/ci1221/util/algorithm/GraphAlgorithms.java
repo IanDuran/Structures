@@ -1,6 +1,7 @@
 package ucr.ac.cr.ecci.ci1221.util.algorithm;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
@@ -112,7 +113,7 @@ public class GraphAlgorithms {
         return !hasCycles;
     }
 
-    public static <V> boolean dfs(V node, Graph<V> graph, Set<V> visited){
+    private static <V> boolean dfs(V node, Graph<V> graph, Set<V> visited){
         boolean hasCycle = false;
         visited.put(node);
         List<V> adjacentNodes = graph.getAdjacentNodes(node);
@@ -149,7 +150,67 @@ public class GraphAlgorithms {
      * @return a dictionary containing the predecessors of each node and the distance.
      */
     public static <V> Dictionary<V, DijkstraResult<V>> getShortestPathDijkstra(Graph<V> graph, V value){
-        return null;
+        if(graph.isDirected())
+            throw new IllegalArgumentException();
+
+        List<V> values = graph.getValues();
+        boolean visited[] = new boolean[values.size()];
+        double distances[] = new double[values.size()];
+        V precursors[] = (V[]) new Object[values.size()];
+
+        //Step 1: Initialization
+        for(int i = 0; i < values.size(); i++){
+            if(values.get(i).equals(value)) {
+                visited[i] = true;
+                precursors[i] = value;
+            }else{
+                distances[i] = graph.getWeight(value, values.get(i));
+                if(distances[i] != -1)
+                    precursors[i] = values.get(i);
+            }
+        }
+        while(!allSeen(visited)){
+            //Step 2: Finding the Node with the minimal distance
+            double minimalDistance = Double.MAX_VALUE;
+            V minimalDistanceValue = null;
+            int visitedIndex = -1;
+            for(int i = 0; i < values.size(); i++){
+                if(!visited[i] && distances[i] != -1 && distances[i] < minimalDistance){
+                    minimalDistance = graph.getWeight(value, values.get(i));
+                    minimalDistanceValue = values.get(i);
+                    visitedIndex = i;
+                }
+            }
+            if(visitedIndex != -1) {
+                visited[visitedIndex] = true;
+                //Step 3: Actualization
+                for (int i = 0; i < values.size(); i++){
+                    if(graph.areLinked(minimalDistanceValue, values.get(i))){
+                        if(distances[visitedIndex] != -1){
+                            if(distances[i] == -1 || distances[i] > graph.getWeight(minimalDistanceValue, values.get(i)) + distances[visitedIndex]){
+                                distances[i] = graph.getWeight(minimalDistanceValue, values.get(i)) + distances[visitedIndex];
+                                precursors[i] = minimalDistanceValue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Dictionary<V, DijkstraResult<V>> shortestPaths = new Hashtable<>();
+        for(int i = 0; i < values.size(); i++){
+            shortestPaths.put(values.get(i), new DijkstraResult<V>(values.get(i), precursors[i], distances[i]));
+        }
+        return shortestPaths;
+    }
+
+    private static boolean allSeen(boolean seenList[]){
+        boolean allSeen = true;
+        for(int i = 0; i < seenList.length; i++){
+            if(!seenList[i])
+                allSeen = false;
+
+        }
+        return allSeen;
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 public class GraphAlgorithmsTests {
     public static void main(String... args){
-        Graph<Character> el = new AdjacencyList<>(true);
+        Graph<Character> el = new AdjacencyList<>(false);
         el.addNode('a');
         el.addNode('b');
         el.addNode('c');
@@ -22,6 +22,6 @@ public class GraphAlgorithmsTests {
         el.addEdge('b', 'c', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
-        System.out.println(GraphAlgorithms.isGraphAcyclic(el));
+        GraphAlgorithms.getShortestPathDijkstra(el, 'd');
     }
 }
