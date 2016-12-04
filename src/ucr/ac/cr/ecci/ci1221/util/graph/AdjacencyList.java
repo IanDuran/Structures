@@ -223,6 +223,24 @@ public class AdjacencyList<V> implements Graph<V> {
         edges = 0;
     }
 
+    @Override
+    public V[] getValuesAsArray() {
+        return values;
+    }
+
+    @Override
+    public double[][] getGraphStructureAsMatrix() {
+        double[][] graphMatrix = new double[vertexes][vertexes];
+        for(int i = 0; i < vertexes; i++){
+            for(int j = 0; j < vertexes; j++){
+                if(i != j){
+                    graphMatrix[i][j] = this.getWeight(values[i], values[j]);
+                }
+            }
+        }
+        return graphMatrix;
+    }
+
     private void enlarge(){
         V[] newArray = (V[]) new Object[values.length + ENLARGING_SIZE];
         List<Node> newAdjacencies[] = new LinkedList[adjacencies.length + ENLARGING_SIZE];

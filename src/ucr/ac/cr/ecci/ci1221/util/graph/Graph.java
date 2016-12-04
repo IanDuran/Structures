@@ -131,4 +131,20 @@ public interface Graph<V> extends Collection, Iterable<V>{
      * @return graph weight
      */
     double getWeight();
+
+    /**
+     * Returns an array of {@code V} that represents the position of the values in the internal
+     * structure as used in the {@code getGraphStructureAsMatrix}.
+     *
+     * @return V array.
+     */
+    V[] getValuesAsArray();
+
+    /**
+     * Returns a matrix containing the weight of the edge between the values in positions (x, y),
+     * if no edge exists then a -1 will be returned in cell (x, y).
+     *
+     * @return matrix
+     */
+    double[][] getGraphStructureAsMatrix();
 }

@@ -198,6 +198,16 @@ public class AdjacencyMatrix<V> implements Graph<V>{
         edges = 0;
     }
 
+    @Override
+    public V[] getValuesAsArray() {
+        return values;
+    }
+
+    @Override
+    public double[][] getGraphStructureAsMatrix() {
+        return matrix;
+    }
+
     private int getIndex(V value){
         int index = -1;
         int counter = 0;

@@ -205,6 +205,24 @@ public class EdgeList<V> implements Graph<V> {
         vertexes = 0;
     }
 
+    @Override
+    public V[] getValuesAsArray() {
+        return values;
+    }
+
+    @Override
+    public double[][] getGraphStructureAsMatrix() {
+        double[][] graphMatrix = new double[vertexes][vertexes];
+        for(int i = 0; i < vertexes; i++){
+            for(int j = 0; j < vertexes; j++){
+                if(i != j){
+                    graphMatrix[i][j] = this.getWeight(values[i], values[j]);
+                }
+            }
+        }
+        return graphMatrix;
+    }
+
     private int getIndex(V value){
         int index = -1;
         int counter = 0;
