@@ -170,8 +170,25 @@ public class AdjacencyMatrix<V> implements Graph<V>{
         return weight;
     }
 
+    /**
+     * Deletes a node from the graph.
+     * If the given node is contained in the graph, it gets the index.
+     * Then, it eliminates all the adjacencies to and from that node.
+     * Finally it moves down the matrix by one position starting from the
+     * index of the node that is being removed.
+     * @param value the value to remove.
+     */
     @Override
     public void removeValue(V value) {
+        if(this.contains(value)){
+            int index = this.getIndex(value);
+            for(int i = 0; i < vertexes; i++){
+                matrix[i][index] = -1;
+                matrix[index][i] = -1;
+            }
+            this.moveDown(index);
+            vertexes--;
+        }
     }
 
     /**
@@ -376,7 +393,11 @@ public class AdjacencyMatrix<V> implements Graph<V>{
     private void moveDown(int index){
         for(int i = index; i < vertexes - 1; i++){
             values[i] = values[i + 1];
-            matrix[i] = matrix[i + 1];
+        }
+        for(int i = index; i < vertexes - 1; i++){
+            for(int j = index; j < vertexes - 1; j++){
+                matrix[i][j] = matrix[i + 1][j + 1];
+            }
         }
     }
 
