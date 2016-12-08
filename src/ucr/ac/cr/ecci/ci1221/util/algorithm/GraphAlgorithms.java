@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
+import ucr.ac.cr.ecci.ci1221.util.collections.queue.LinkedListQueue;
+import ucr.ac.cr.ecci.ci1221.util.collections.queue.Queue;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.LinkedListSet;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 import ucr.ac.cr.ecci.ci1221.util.graph.AdjacencyList;
@@ -108,18 +110,18 @@ public class GraphAlgorithms {
         if(!graph.isEmpty()){
             Iterator<V> i = graph.iterator();
             Set<V> visited = new LinkedListSet<>();
-            hasCycles = dfs(i.next(), graph, visited);
+            hasCycles = dfsCycles(i.next(), graph, visited);
         }
         return !hasCycles;
     }
 
-    private static <V> boolean dfs(V node, Graph<V> graph, Set<V> visited){
+    private static <V> boolean dfsCycles(V node, Graph<V> graph, Set<V> visited){
         boolean hasCycle = false;
         visited.put(node);
         List<V> adjacentNodes = graph.getAdjacentNodes(node);
         for (int i = 0; i < adjacentNodes.size(); i++) {
             if (!visited.isMember(adjacentNodes.get(i)))
-                hasCycle = dfs(adjacentNodes.get(i), graph, visited);
+                hasCycle = dfsCycles(adjacentNodes.get(i), graph, visited);
 
             else
                 hasCycle = true;
@@ -198,7 +200,7 @@ public class GraphAlgorithms {
         }
         Dictionary<V, DijkstraResult<V>> shortestPaths = new Hashtable<>();
         for(int i = 0; i < values.size(); i++){
-            shortestPaths.put(values.get(i), new DijkstraResult<V>(values.get(i), precursors[i], distances[i]));
+            shortestPaths.put(values.get(i), new DijkstraResult<>(values.get(i), precursors[i], distances[i]));
         }
         return shortestPaths;
     }
@@ -254,8 +256,42 @@ public class GraphAlgorithms {
         }
     }
 
-    public static <V> List<Graph<V>> getConnectedComponents(Graph<V> graph){
-        return null;
+    public static <V> List<Graph<V>> getConnectedComponents(Graph<V> graph) {
+        List<Graph<V>> components = new LinkedList<>();
+        V[] values = graph.getValuesAsArray();
+        Set<V> visited = new LinkedListSet<>();
+        for(int i = 0; i < values.length; i++){
+            if(!visited.isMember(values[i])){
+                components.add(bfsComponents(graph, values, visited, i));
+            }
+        }
+        return components;
+    }
+
+    private static <V> Graph<V> bfsComponents(Graph<V> graph, V values[], Set<V> visited, int index){
+        Graph<V> currentComponent = new AdjacencyList<>(false);
+        Queue<V> queue = new LinkedListQueue<>();
+        queue.enqueue(values[index]);
+        while(!queue.isEmpty()){
+            V currentValue = queue.dequeue();
+            visited.put(currentValue);
+            currentComponent.addNode(currentValue);
+            List<V> adjacencies = graph.getAdjacentNodes(currentValue);
+            for(int i = 0; i < adjacencies.size(); i++){
+                if(!visited.isMember(adjacencies.get(i))) {
+                    queue.enqueue(adjacencies.get(i));
+                }
+            }
+        }
+        V[] componentValues = currentComponent.getValuesAsArray();
+        for(int i = 0; i < componentValues.length; i++){
+            for(int j = 0; j < componentValues.length; j++){
+                if(i != j && graph.areLinked(componentValues[i], componentValues[j])){
+                    currentComponent.addEdge(componentValues[i], componentValues[j], graph.getWeight(componentValues[i], componentValues[j]));
+                }
+            }
+        }
+        return currentComponent;
     }
 
     /**

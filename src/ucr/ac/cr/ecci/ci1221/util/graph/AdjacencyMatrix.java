@@ -200,7 +200,11 @@ public class AdjacencyMatrix<V> implements Graph<V>{
 
     @Override
     public V[] getValuesAsArray() {
-        return values;
+        V[] returnedValues = (V[]) new Object[vertexes];
+        for(int i = 0; i < vertexes; i++){
+            returnedValues[i] = values[i];
+        }
+        return returnedValues;
     }
 
     @Override

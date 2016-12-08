@@ -34,12 +34,14 @@ public class AdjacencyList<V> implements Graph<V> {
 
     @Override
     public void addNode(V value) {
-        if(vertexes >= values.length)
-            this.enlarge();
+        if(!this.contains(value)){
+            if(vertexes >= values.length)
+                this.enlarge();
 
-        adjacencies[vertexes] = new LinkedList<>();
-        values[vertexes] = value;
-        vertexes++;
+            adjacencies[vertexes] = new LinkedList<>();
+            values[vertexes] = value;
+            vertexes++;
+        }
     }
 
     @Override
@@ -225,7 +227,11 @@ public class AdjacencyList<V> implements Graph<V> {
 
     @Override
     public V[] getValuesAsArray() {
-        return values;
+        V[] returnedValues = (V[]) new Object[vertexes];
+        for(int i = 0; i < vertexes; i++){
+            returnedValues[i] = values[i];
+        }
+        return returnedValues;
     }
 
     @Override
