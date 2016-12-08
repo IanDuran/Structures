@@ -170,8 +170,33 @@ public class AdjacencyList<V> implements Graph<V> {
         return weight;
     }
 
+    /**
+     * Removes a node from the graph.
+     * If the node is contained within the graph, it gets the index of the node, then it calls the moveDown
+     * method to get rid of the node and its adjacency list. Then it goes over every adjacency checking the destinations.
+     * If the destination is the eliminated node, the adjacency is removed from the list, if the destination is a node with
+     * a higher position than the eliminated node, the destination number is decreased by one, since all the values
+     * after the eliminated node are one position down from their previous one.
+     * @param value the value to remove.
+     */
     @Override
     public void removeValue(V value) {
+        if(this.contains(value)){
+            int index = this.getIndex(value);
+            this.moveDown(index);
+            vertexes--;
+            for(int i = 0; i < vertexes; i++){
+                List<Node> currentAdjacencies = adjacencies[i];
+                for(int j = 0; j < currentAdjacencies.size(); j++){
+                    if(currentAdjacencies.get(j).getValue() == index){
+                        currentAdjacencies.remove(j);
+                        j--;
+                    }else if(currentAdjacencies.get(j).getValue() > index){
+                        currentAdjacencies.get(j).setValue(currentAdjacencies.get(j).getValue() - 1);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -377,8 +402,6 @@ public class AdjacencyList<V> implements Graph<V> {
             values[i] = values[i + 1];
             adjacencies[i] = adjacencies[i + 1];
         }
-        values[vertexes] = null;
-        adjacencies[vertexes] = null;
     }
 
     /**
