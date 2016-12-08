@@ -25,7 +25,7 @@ public class GraphAlgorithms {
         if(graph.isDirected())
             throw new IllegalArgumentException();
 
-        Graph<V> minimumTree = new AdjacencyList<>(false);
+        Graph<V> minimumTree = new AdjacencyList<>(false, true);
         Iterator<V> it = graph.iterator();
         minimumTree.addNode(it.next());
         while(minimumTree.V() < graph.V()){
@@ -84,10 +84,7 @@ public class GraphAlgorithms {
             }
         }
         SortingAlgorithms.mergeSort(edges);
-
-        //Initializing the forest
-
-            /*if(!minimumTree.contains(e.getFirstValue()) || !minimumTree.contains(e.getSecondValue())){
+        /*if(!minimumTree.contains(e.getFirstValue()) || !minimumTree.contains(e.getSecondValue())){
                 if (!minimumTree.contains(e.getFirstValue()))
                     minimumTree.addNode(e.getFirstValue());
 
@@ -323,7 +320,7 @@ public class GraphAlgorithms {
      * @return a graph with all the modes connected to the one passed as a parameter.
      */
     private static <V> Graph<V> bfsComponents(Graph<V> graph, V values[], Set<V> visited, int index){
-        Graph<V> currentComponent = new AdjacencyList<>(false);
+        Graph<V> currentComponent = new AdjacencyList<>(false, true);
         Queue<V> queue = new LinkedListQueue<>();
         queue.enqueue(values[index]);
         while(!queue.isEmpty()){
