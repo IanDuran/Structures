@@ -3,6 +3,7 @@ package ucr.ac.cr.ecci.ci1221.util.collections.dictionary;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.LinkedList;
 import ucr.ac.cr.ecci.ci1221.util.collections.list.List;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.BinarySearchTree;
+import ucr.ac.cr.ecci.ci1221.util.collections.set.LinkedListSet;
 import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
 
 import java.util.ListIterator;
@@ -10,7 +11,7 @@ import java.util.ListIterator;
 /**
  * @author Ian Duran
  */
-public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
+public class Hashtable<K , V> implements Dictionary<K, V> {
 
     private final int INITIAL_SIZE = 40;
     private final int INITIAL_SUBARRAY_SIZE = 1;
@@ -57,7 +58,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
         boolean isContained = false;
         if(key instanceof Comparable){
             for(int i = 0; i < numOfKeys; i++)
-                if(keys[i].compareTo((K)key) == 0)
+                if(keys[i].equals((K)key))
                     isContained = true;
 
         }
@@ -135,7 +136,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
             values[bucket] = (V[]) new Object[INITIAL_SUBARRAY_SIZE];
             int index = 0;
             for(int i = 0; i < numOfKeys; i++)
-                if(keys[i].compareTo(key) == 0)
+                if(keys[i].equals(key))
                     index = i;
             this.moveDown(index);
             numOfKeys--;
@@ -160,7 +161,7 @@ public class Hashtable<K extends Comparable<? super K>, V> implements Dictionary
      */
     @Override
     public Set<K> keySet() {
-        Set<K> keySet = new BinarySearchTree<>();
+        Set<K> keySet = new LinkedListSet<>();
         for(int i = 0; i < numOfKeys;i++)
             if(keys[i] != null)
                 keySet.put(keys[i]);

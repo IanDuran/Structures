@@ -22,13 +22,6 @@ public class GraphAlgorithmsTests {
         el.addEdge('b', 'c', 6);
         el.addEdge('c', 'd', 5);
         el.addEdge('e', 'd', 7.4);
-        List<Graph<Character>> l = GraphAlgorithms.getConnectedComponents(el);
-        for(int i = 0; i < l.size(); i++){
-            List<Character> list = l.get(i).getValues();
-            for(int j = 0; j < list.size(); j++)
-                System.out.print(list.get(j) + " ");
-
-            System.out.println();
-        }
+        System.out.println(GraphAlgorithms.isGraphAcyclic(el));
     }
 }

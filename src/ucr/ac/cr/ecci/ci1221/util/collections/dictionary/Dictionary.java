@@ -9,7 +9,7 @@ import ucr.ac.cr.ecci.ci1221.util.collections.set.Set;
  *
  * @author Rodrigo A. Bartels
  */
-public interface Dictionary<K extends Comparable<? super K>, V> {
+public interface Dictionary<K, V> {
 
     /**
      * Returns the number of key-value mappings in this dictionary.  If the
