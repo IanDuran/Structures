@@ -63,15 +63,31 @@ public class GraphAlgorithms {
 
     /**
      * Returns the minimum spanning tree of the given graph calculated using Kruskal's algorithm.
+     * First it initializes the graph that will be returned, a list with the values of the given
+     * graph, a list of edges and a list of sets. It then stores the values of the graph in a different
+     * set and adds them to the new graph. It then gets all the edges from the graph and sorts them using
+     * merge sort. Then it goes into a loop while the list of edges is not empty. In the loop it removes
+     * the first edge from the list and searches the forest list for the values inside it getting the list
+     * positions for each one. If the indexes are different it means the values are in a different sets,
+     * so its okay to add an edge between them in the new graph. It then removes the set of the first element
+     * and the set of the second element, makes a new one using union and inserts it in the forest, then
+     * it adds an edge between the tow nodes in the new graph. Finally the new graph is returned.
      */
     public static <V> Graph<V> getMinimumSpanningTreeKruskal(Graph<V> graph){
         if(graph.isDirected())
             throw new IllegalArgumentException();
 
-        //Graph<V> minimumTree = new AdjacencyList<>(false);
-        List<Graph<V>> forest = new LinkedList<>();
+        Graph<V> minimumTree = new AdjacencyList<>(false, true);
         List<V> values = graph.getValues();
         List<Edges<V>> edges = new LinkedList<>();
+        List<Set<V>> forest = new LinkedList<>();
+        //Storing the values
+        for(int i = 0; i < values.size(); i++){
+            Set<V> tree = new LinkedListSet<>();
+            tree.put(values.get(i));
+            forest.add(tree);
+            minimumTree.addNode(values.get(i));
+        }
 
         //Getting all the edges
         for(int i = 0; i < values.size(); i++){
@@ -84,17 +100,30 @@ public class GraphAlgorithms {
             }
         }
         SortingAlgorithms.mergeSort(edges);
-        /*if(!minimumTree.contains(e.getFirstValue()) || !minimumTree.contains(e.getSecondValue())){
-                if (!minimumTree.contains(e.getFirstValue()))
-                    minimumTree.addNode(e.getFirstValue());
+        while(!edges.isEmpty()){
+            Edges<V> e = edges.get(0);
+            edges.remove(0);
+            int firstSetIndex = -1;
+            int secondSetIndex = -1;
+            for(int i = 0; i < forest.size(); i++){
+                if(forest.get(i).isMember(e.firstValue))
+                    firstSetIndex = i;
 
-                if (!minimumTree.contains(e.getSecondValue()))
-                    minimumTree.addNode(e.getSecondValue());
+                else if(forest.get(i).isMember(e.secondValue))
+                    secondSetIndex = i;
+            }
 
+            if(firstSetIndex != secondSetIndex && firstSetIndex != -1 && secondSetIndex != -1){
+                Set<V> firstSet = forest.get(firstSetIndex);
+                Set<V> secondSet = forest.get(secondSetIndex);
+                forest.remove(firstSetIndex);
+                forest.remove(secondSetIndex);
+                Set<V> unitedSet = firstSet.union(secondSet);
                 minimumTree.addEdge(e.getFirstValue(), e.getSecondValue(), e.getWeight());
-            }*/
-
-        return null;
+                forest.add(unitedSet);
+            }
+        }
+        return minimumTree;
     }
 
     /**
@@ -149,8 +178,11 @@ public class GraphAlgorithms {
      * @param paths the result of Dikjstra's algorithm.
      * @param <V> the type of elements stored in the original graph.
      */
-    public <V> void printShortestPath(V value, Dictionary<V, DijkstraResult<V>> paths){
-
+    public static <V> void printShortestPath(V value, Dictionary<V, DijkstraResult<V>> paths){
+        List<DijkstraResult<V>> list = paths.values();
+        for(int i = 0; i < list.size(); i++){
+            System.out.println("From " + value.toString() + " using " + list.get(i).getPrecursor() + " to " + list.get(i).getVertex() + " with a distance of " + list.get(i).getDistance());
+        }
     }
 
     /**
@@ -217,7 +249,7 @@ public class GraphAlgorithms {
             }
         }
         Dictionary<V, DijkstraResult<V>> shortestPaths = new Hashtable<>();
-        for(int i = 0; i < values.size(); i++){
+        for(int i = 0; i < values.size(); i++){                 //Destination    Precursor      distance
             shortestPaths.put(values.get(i), new DijkstraResult<>(values.get(i), precursors[i], distances[i]));
         }
         return shortestPaths;
