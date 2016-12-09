@@ -20,6 +20,14 @@ public class GraphAlgorithms {
 
     /**
      * Returns the minimum spanning tree of the given graph calculated using Prim's algorithm.
+     * First it creates a new graph to be returned and adds the first node of the graph to it.
+     * It then goes on a loop that iterates while the new graph is smaller than the one given.
+     * Inside the loop a list is made with the values of the minimum tree, a double is created
+     * for storing the weight of the smallest edge and a V object is declared. Then
+     * it iterates over all the adjacencies of all the nodes currently stored in the new graph and
+     * selects the smallest one, sets the weight of the edge and sets the V object to be the one
+     * at the end of the selected edge. Then the node is added and the edge is created. Finally
+     * a graph representing the minimum spanning tree is returned.
      */
     public static <V> Graph<V> getMinimumSpanningTreePrim(Graph<V> graph){
         if(graph.isDirected())
